@@ -43,6 +43,10 @@ interface UiState {
   flyTo: { bbox?: [number, number, number, number]; center?: [number, number]; zoom?: number; nonce: number } | null;
   requestFlyTo(t: Omit<NonNullable<UiState['flyTo']>, 'nonce'>): void;
 
+  /** photo ids waiting for a manually chosen location: MapView shows a "click to place" mode, then calls updatePhotos(ids,{location}) and resets */
+  placing: string[] | null;
+  setPlacing(ids: string[] | null): void;
+
   commandPaletteOpen: boolean;
   setCommandPalette(o: boolean): void;
   settingsOpen: boolean;
@@ -84,6 +88,8 @@ export const useUi = create<UiState>((set, get) => ({
   draftArea: null, setDraftArea: (draftArea) => set({ draftArea }),
   mapBounds: null, setMapBounds: (mapBounds) => set({ mapBounds }),
   flyTo: null, requestFlyTo: (t) => set({ flyTo: { ...t, nonce: Date.now() } }),
+
+  placing: null, setPlacing: (placing) => set({ placing, ...(placing ? { view: 'map' as const } : {}) }),
 
   commandPaletteOpen: false, setCommandPalette: (commandPaletteOpen) => set({ commandPaletteOpen }),
   settingsOpen: false, setSettingsOpen: (settingsOpen) => set({ settingsOpen }),

@@ -231,6 +231,8 @@ export interface ImageWorldApi {
     search(query: string): Promise<GeocodeResult[]>;
   };
   shell: {
+    /** absolute path of a dropped File (Electron webUtils.getPathForFile) – for drag&drop of folders */
+    pathForFile(file: File): string;
     showInFolder(photoId: string): Promise<void>;
     openOriginal(photoId: string): Promise<void>;
     /** clears thumbnail cache; re-generated lazily */

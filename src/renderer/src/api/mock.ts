@@ -145,7 +145,7 @@ export function installMockApi(): void {
         return CITIES.filter((c) => c[0].toLowerCase().includes(n) || c[1].toLowerCase().includes(n)).slice(0, 6).map((c) => ({ name: c[0], detail: c[1], lat: c[3], lon: c[4], kind: 'city' as const, bbox: [c[4] - 0.15, c[3] - 0.1, c[4] + 0.15, c[3] + 0.1] as [number, number, number, number] }));
       },
     },
-    shell: { showInFolder: async () => {}, openOriginal: async () => {}, clearThumbCache: async () => {} },
+    shell: { pathForFile: (f) => (f as File & { path?: string }).path ?? f.name, showInFolder: async () => {}, openOriginal: async () => {}, clearThumbCache: async () => {} },
     window: { minimize() {}, toggleMaximize() {}, close() {}, isMaximized: async () => false, onMaximizedChange: () => () => {} },
   };
   window.api = api;

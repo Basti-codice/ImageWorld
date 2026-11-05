@@ -1,5 +1,5 @@
 // Preload: exposes the typed API on window.api. Implemented by the backend agent (see src/main/ipc.ts).
-import { contextBridge, ipcRenderer } from 'electron';
+import { contextBridge, ipcRenderer, webUtils } from 'electron';
 import type { ImageWorldApi } from '@shared/types';
 
 const invoke = (channel: string, ...args: unknown[]) => ipcRenderer.invoke(channel, ...args);
@@ -41,6 +41,7 @@ const api: ImageWorldApi = {
   },
   geocode: { search: (q) => invoke('geocode:search', q) },
   shell: {
+    pathForFile: (file) => webUtils.getPathForFile(file),
     showInFolder: (id) => invoke('shell:showInFolder', id),
     openOriginal: (id) => invoke('shell:openOriginal', id),
     clearThumbCache: () => invoke('shell:clearThumbCache'),

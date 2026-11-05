@@ -18,6 +18,7 @@ import CreateAlbumDialog from '@/features/albums/CreateAlbumDialog';
 import CommandPalette from '@/features/search/CommandPalette';
 import SettingsDialog from '@/features/settings/SettingsDialog';
 import Onboarding from '@/features/onboarding/Onboarding';
+import ActiveFilters from '@/features/search/ActiveFilters';
 
 export default function App() {
   const { view, setCommandPalette, clearSelection } = useUi();
@@ -56,6 +57,7 @@ export default function App() {
       <div className="app__body" data-collapsed={settings.sidebarCollapsed}>
         <Sidebar />
         <main className="app__main">
+          {!empty && (view === 'map' || view === 'photos') && <ActiveFilters />}
           <div className="app__view">
             {empty ? <Onboarding /> : view === 'map' ? <MapView /> : view === 'photos' ? <PhotosView /> : view === 'albums' ? <AlbumsView /> : view === 'places' ? <PlacesView /> : <InsightsView />}
             {!empty && <SelectionBar />}
