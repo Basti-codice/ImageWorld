@@ -80,6 +80,7 @@
 .nav__more:hover { background: var(--surface-4); color: var(--text); }
 .navrow--aside:hover .nav__count { opacity: 0; }
 .navrow--aside .nav { padding-right: 36px; }
+.navrow--aside .nav__count { margin-right: -23px; }
 .navrow--aside:hover .nav__status { opacity: 0; }
 .srcicon { position: relative; display: grid; place-items: center; }
 .srcicon--warn { color: var(--warning); } .srcicon--err { color: var(--danger); }

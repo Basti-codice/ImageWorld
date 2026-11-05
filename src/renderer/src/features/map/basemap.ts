@@ -160,7 +160,7 @@ interface Palette {
   skyColor: string; horizon: string; space: string;
 }
 const DARK: Palette = {
-  ocean: '#070a11', land: '#171e2b', landA: '#171e2b', landB: '#1c2433', coast: '#34425a', border: '#2b3649', grat: '#7c93c0', gratOpacity: 0.09,
+  ocean: '#060910', land: '#1a2231', landA: '#1a2231', landB: '#212b3d', coast: '#3a4a66', border: '#303c52', grat: '#7c93c0', gratOpacity: 0.09,
   skyColor: '#0a1020', horizon: '#27447a', space: '#04060a',
 };
 const LIGHT: Palette = {
