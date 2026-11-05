@@ -15,7 +15,9 @@ a { color: var(--accent-text); text-decoration: none; }
 a:hover { text-decoration: underline; }
 :focus { outline: none; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: var(--r-xs); }
-button:focus-visible, [role='button']:focus-visible, [role='tab']:focus-visible, [role='menuitem']:focus-visible, [role='switch']:focus-visible { outline-offset: -2px; box-shadow: 0 0 0 4px var(--accent-soft); }
+button:focus-visible, [role='tab']:focus-visible { outline-offset: 1px; border-radius: inherit; }
+.nav:focus-visible, .tabs__tab:focus-visible, .menu__item:focus-visible, .seg > button:focus-visible, .ibtn:focus-visible { outline-offset: -2px; }
+.switch:focus-visible { outline-offset: 2px; border-radius: 10px; }
 ::selection { background: color-mix(in srgb, var(--accent) 35%, transparent); }
 img, svg { -webkit-user-drag: none; }
 /* text selection: UI chrome is not selectable, content and inputs are */

@@ -397,7 +397,7 @@ export class MapController {
 
   private overviewZoom(w: number, h: number): number {
     return this.projection === 'globe'
-      ? Math.log2((0.78 * Math.min(h, w * 0.9) * Math.PI) / (512 * 1.38))
+      ? Math.log2((0.84 * Math.min(h, w * 0.9) * Math.PI) / 512)
       : Math.log2(Math.max(w, h * 2) / 512);
   }
 
