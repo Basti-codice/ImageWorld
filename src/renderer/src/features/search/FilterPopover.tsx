@@ -130,7 +130,7 @@ const Panel = forwardRef<HTMLDivElement, { anchor: { right: number; bottom: numb
   const reset = () => setFilters({ kinds: [], favoritesOnly: false, location: 'any', cameras: [], lenses: [], countries: [], sourceIds: [], minRating: 0, tags: [] });
 
   return (
-    <div ref={ref} className="fp glass" style={style} role="dialog" aria-label={t('search.filters.title')}>
+    <div ref={ref} className="fp" style={style} role="dialog" aria-label={t('search.filters.title')}>
       <header className="fp__head">
         <h3>{t('search.filters.title')}</h3>
         {active > 0 && <Button variant="ghost" size="sm" onClick={reset}>{t('search.filters.reset')}</Button>}

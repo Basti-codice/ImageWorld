@@ -5,6 +5,9 @@ import { Bell, Cloud, Download, FolderOpen, Heart, Image as ImageIcon, MapPin, P
 import { Avatar, Badge, Button, ConfirmDialog, CountryChip, Dialog, EmptyState, IconButton, Kbd, Menu, Popover, ProgressBar, ProgressRing, SectionLabel, Segmented, Skeleton, Slider, Spinner, Switch, Tabs, TooltipLayer, Toasts, tabPanelProps } from '@/ui';
 import { Logo } from '@/ui/Logo';
 import { useUi } from '@/state/ui';
+import '@/shell/shell.css';
+import { CrashPanel } from '@/shell/ErrorBoundary';
+import DropOverlay from '@/shell/DropOverlay';
 import { useLang } from '@/i18n';
 
 const SWATCHES: Array<[string, string]> = [
@@ -102,6 +105,10 @@ export default function Kit() {
           <Row label="Empty state"><div className="kit__empty"><EmptyState icon={<ImageIcon size={24} />} title="Keine Fotos gefunden" hint="Passe die Filter an oder füge einen weiteren Ordner hinzu." action={<Button size="sm" icon={<Plus size={14} />}>Ordner hinzufügen</Button>} /></div></Row>
           <SectionLabel>Section label</SectionLabel>
         </Sec>
+
+        <Sec title="Error state" hint="Shown by the per-view error boundary; the rest of the shell keeps working.">
+          <div className="kit__crash"><CrashPanel error={new Error('Cannot read properties of undefined (reading "lat")')} onRetry={() => {}} /></div>
+        </Sec>
       </div>
 
       {menu && <Menu x={menu.x} y={menu.y} onClose={() => setMenu(null)} items={[
@@ -114,7 +121,7 @@ export default function Kit() {
       <Popover open={pop} onClose={() => setPop(false)} anchor={popBtn} align="start" width={260}><div style={{ padding: 14 }}><b>Popover</b><p style={{ margin: '6px 0 0', color: 'var(--text-2)' }}>Anchored, non-modal. Esc or an outside click closes it and focus returns to the trigger.</p></div></Popover>
       {dlg && <Dialog title="Dialog" onClose={() => setDlg(false)} footer={<><Button variant="ghost" onClick={() => setDlg(false)}>Abbrechen</Button><Button variant="primary" onClick={() => setDlg(false)}>Speichern</Button></>}><div style={{ display: 'grid', gap: 10 }}><p style={{ margin: 0 }}>Focus is trapped inside; Esc closes; focus returns to the opener.</p><input className="field" placeholder="Name" /></div></Dialog>}
       {confirm && <ConfirmDialog danger title="Quelle entfernen?" message="Die Originaldateien bleiben unverändert." confirmLabel="Entfernen" onConfirm={() => toast('Entfernt')} onClose={() => setConfirm(false)} />}
-      <Toasts /><TooltipLayer />
+      <Toasts /><TooltipLayer /><DropOverlay />
     </div>
   );
 }

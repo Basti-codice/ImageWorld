@@ -205,7 +205,7 @@ export default function MapView() {
 
       <div ref={bottomRef} className="mp-bottom" data-lift={selection.size > 0}>
         {draft && <SelectionCard area={draft} geo={geo} />}
-        {geo.length > 0 && <ViewStrip photos={inViewPhotos} />}
+        {geo.length > 0 && <ViewStrip photos={inViewPhotos} total={viewport?.inViewCount ?? inViewPhotos.length} />}
       </div>
     </div>
   );

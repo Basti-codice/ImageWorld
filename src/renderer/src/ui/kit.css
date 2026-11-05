@@ -15,3 +15,4 @@
 .kit__rad { width: 64px; height: 64px; background: var(--surface-3); display: grid; place-items: center; font-size: 11px; color: var(--text-3); }
 .kit__panel { padding: 12px 4px; color: var(--text-2); }
 .kit__empty { border: 1px dashed var(--border-strong); border-radius: var(--r-md); width: 100%; }
+.kit__crash { position: relative; height: 320px; border: 1px solid var(--border); border-radius: var(--r-md); background: var(--bg); overflow: hidden; }

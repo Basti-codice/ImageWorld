@@ -79,12 +79,18 @@ export class PlaceIndex {
     return this.regionName(code.toUpperCase(), lang);
   }
 
-  /** nearest populated place (>= 1000 inhabitants) within ~100 km */
+  /**
+   * Nearest populated place (>= 1000 inhabitants) within ~100 km. Districts of big cities (Berlin-Mitte, Manhattan…)
+   * are lifted to the city: among everything within max(6 km, 1.5 × nearest distance) the most populous place wins.
+   */
   reverse(lat: number, lon: number): Place | undefined {
     if (!Number.isFinite(lat) || !Number.isFinite(lon) || Math.abs(lat) > 90 || Math.abs(lon) > 180) return undefined;
-    const ids = around(this.tree, lon, lat, 1, REVERSE_MAX_KM);
-    if (!ids.length) return undefined;
-    const i = ids[0];
+    const nearest = around(this.tree, lon, lat, 1, REVERSE_MAX_KM);
+    if (!nearest.length) return undefined;
+    let i = nearest[0];
+    const d0 = distance(lon, lat, this.lon[i], this.lat[i]);
+    const near = around(this.tree, lon, lat, 30, Math.max(6, d0 * 1.5));
+    for (const j of near) if (this.pop[j] > this.pop[i]) i = j;
     const code = this.cc[i];
     return { city: this.names[i], country: this.countryName(code, 'en'), countryCode: code };
   }

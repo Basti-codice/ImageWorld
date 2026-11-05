@@ -1,7 +1,7 @@
 import { useCallback, useDeferredValue, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import {
-  Aperture, BarChart3, Camera, Clock, CornerDownLeft, Flame, Folder, FolderHeart, FolderPlus, Globe, Globe2, Heart, Image as ImageIcon, Images, ListFilter, Map as MapIcon,
+  Aperture, BarChart3, Camera, Clock, CornerDownLeft, Flame, FolderHeart, FolderPlus, Globe, Globe2, Heart, Images, ListFilter, Map as MapIcon,
   MapPin, MapPinOff, MapPinned, MoonStar, PanelBottom, RotateCcw, Search, Settings as SettingsIcon, Tag, Video, X, XCircle, Calendar,
 } from 'lucide-react';
 import clsx from 'clsx';
@@ -11,7 +11,7 @@ import { tn, useT, useLang } from '@/i18n';
 import { useUi, type View } from '@/state/ui';
 import { useLibrary } from '@/state/library';
 import { activeFilterCount, isKindWord, isYearToken, MONTHS, norm, queryTokens, textMatcher, type Filters } from '@/lib/filter';
-import { fmtDate, fmtNumber } from '@/lib/format';
+import { fmtDate } from '@/lib/format';
 import { thumbUrl } from '@/lib/media';
 import { countryName } from '@/lib/countries';
 import { getIndex, padBBox, endOfMonth, endOfYear, startOfMonth, startOfYear, type BBox } from './searchIndex';
@@ -359,7 +359,7 @@ function Palette() {
 
   return createPortal(
     <div className="cp-backdrop" onMouseDown={(e) => { if (e.target === e.currentTarget) close(); }}>
-      <div className="cp glass" role="dialog" aria-modal="true" aria-label={t('search.palette')}>
+      <div className="cp" role="dialog" aria-modal="true" aria-label={t('search.palette')}>
         <div className="cp__input">
           <Search size={18} />
           <input
@@ -370,7 +370,7 @@ function Palette() {
           <Kbd>Esc</Kbd>
         </div>
         <div ref={listRef} id="cp-list" className="cp__list" role="listbox">
-          {items.length ? body : <div className="cp__none"><Folder size={0} />{t('search.none')}</div>}
+          {items.length ? body : <div className="cp__none">{t('search.none')}</div>}
         </div>
         <footer className="cp__foot">
           <span><Kbd>↑</Kbd><Kbd>↓</Kbd>{t('search.foot.nav')}</span>

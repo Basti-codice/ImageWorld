@@ -18,9 +18,11 @@ export default function DropOverlay() {
   useEffect(() => {
     let depth = 0;
     const enter = (e: DragEvent) => { if (!hasFiles(e)) return; e.preventDefault(); depth++; setActive(true); };
-    const over = (e: DragEvent) => { if (!e.dataTransfer) return; e.preventDefault(); if (hasFiles(e)) e.dataTransfer.dropEffect = 'copy'; else e.dataTransfer.dropEffect = 'none'; };
+    // only OS file drags are handled here – in-app drags (albums, tags …) keep their own handlers untouched
+    const over = (e: DragEvent) => { if (!hasFiles(e) || !e.dataTransfer) return; e.preventDefault(); e.dataTransfer.dropEffect = 'copy'; };
     const leave = (e: DragEvent) => { if (!hasFiles(e)) return; depth = Math.max(0, depth - 1); if (depth === 0) setActive(false); };
     const drop = async (e: DragEvent) => {
+      if (!hasFiles(e)) return;
       e.preventDefault(); depth = 0; setActive(false);
       const dt = e.dataTransfer; if (!dt || !dt.files.length) return;
       // webkitGetAsEntry must be read synchronously inside the event

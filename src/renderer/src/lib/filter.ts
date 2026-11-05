@@ -52,7 +52,8 @@ export function activeFilterCount(f: Filters, opts: { ignoreRange?: boolean } = 
 }
 
 /** lower-case + strip diacritics (ü → u, é → e) */
-export const norm = (s: string) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+const ASCII = /^[\x00-\x7f]*$/;
+export const norm = (s: string) => (ASCII.test(s) ? s.toLowerCase() : s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''));
 
 export const MONTHS: Record<string, number> = {
   januar: 0, january: 0, jan: 0, jaenner: 0, februar: 1, february: 1, feb: 1, maerz: 2, marz: 2, march: 2, mar: 2, april: 3, apr: 3,
@@ -78,13 +79,37 @@ export function queryTokens(query: string): string[] {
 // per-photo normalised "haystack" (space separated words, with a leading space) – built lazily, cached by object identity
 const hayCache = new WeakMap<Photo, string>();
 const WORDS = /[^\p{L}\p{N}]+/gu;
+const partCache = new Map<string, string>();
+/** normalised words of a frequently repeated string (camera, lens, place …) – cached so that building the haystack of 100k photos stays cheap */
+function part(s: string | undefined): string {
+  if (!s) return '';
+  let v = partCache.get(s);
+  if (v === undefined) { v = norm(s).replace(WORDS, ' '); if (partCache.size < 50000) partCache.set(s, v); }
+  return v;
+}
 function hayOf(p: Photo): string {
   let h = hayCache.get(p);
   if (h === undefined) {
-    h = ' ' + norm([p.name, p.ext, p.place?.city, p.place?.region, p.place?.country, p.place?.countryCode, p.camera, p.lens, ...p.tags].filter(Boolean).join(' ')).replace(WORDS, ' ');
+    let tags = '';
+    for (let i = 0; i < p.tags.length; i++) tags += ' ' + part(p.tags[i]);
+    h = ' ' + norm(p.name).replace(WORDS, ' ') + ' ' + p.ext + ' ' + part(p.place?.city) + ' ' + part(p.place?.region) + ' ' + part(p.place?.country) + ' ' + (p.place ? p.place.countryCode.toLowerCase() : '') + ' ' + part(p.camera) + ' ' + part(p.lens) + tags;
     hayCache.set(p, h);
   }
   return h;
+}
+
+/** Pre-builds the text-search haystacks in idle time so the first query on a big library is instant. */
+let warmToken = 0;
+export function warmTextIndex(photos: Photo[]): void {
+  const token = ++warmToken;
+  let i = 0;
+  const step = () => {
+    if (token !== warmToken) return;
+    const end = Math.min(photos.length, i + 4000);
+    for (; i < end; i++) hayOf(photos[i]);
+    if (i < photos.length) setTimeout(step, 0);
+  };
+  setTimeout(step, 300);
 }
 
 type Pred = (p: Photo, d: () => Date) => boolean;
@@ -96,14 +121,14 @@ function tokenPredicate(t: string): Pred {
   if (kw === 'fav') return (p) => p.favorite;
   // "2023-07" / "07/2023" / "7.2023"
   let m = /^(\d{4})[-/.](\d{1,2})$/.exec(t) ?? undefined;
-  if (m) { const y = +m[1], mo = +m[2] - 1; return (p, d) => d().getUTCFullYear() === y && d().getUTCMonth() === mo; }
+  if (m) { const y = +m[1], mo = +m[2] - 1; return (_p, d) => d().getUTCFullYear() === y && d().getUTCMonth() === mo; }
   m = /^(\d{1,2})[./](\d{4})$/.exec(t) ?? undefined;
-  if (m) { const y = +m[2], mo = +m[1] - 1; return (p, d) => d().getUTCFullYear() === y && d().getUTCMonth() === mo; }
+  if (m) { const y = +m[2], mo = +m[1] - 1; return (_p, d) => d().getUTCFullYear() === y && d().getUTCMonth() === mo; }
   // "2023-07-14" / "14.07.2023"
   m = /^(\d{4})-(\d{1,2})-(\d{1,2})$/.exec(t) ?? undefined;
-  if (m) { const y = +m[1], mo = +m[2] - 1, da = +m[3]; return (p, d) => d().getUTCFullYear() === y && d().getUTCMonth() === mo && d().getUTCDate() === da; }
+  if (m) { const y = +m[1], mo = +m[2] - 1, da = +m[3]; return (_p, d) => d().getUTCFullYear() === y && d().getUTCMonth() === mo && d().getUTCDate() === da; }
   m = /^(\d{1,2})\.(\d{1,2})\.(\d{2,4})$/.exec(t) ?? undefined;
-  if (m) { const da = +m[1], mo = +m[2] - 1, y = +m[3] < 100 ? 2000 + +m[3] : +m[3]; return (p, d) => d().getUTCFullYear() === y && d().getUTCMonth() === mo && d().getUTCDate() === da; }
+  if (m) { const da = +m[1], mo = +m[2] - 1, y = +m[3] < 100 ? 2000 + +m[3] : +m[3]; return (_p, d) => d().getUTCFullYear() === y && d().getUTCMonth() === mo && d().getUTCDate() === da; }
   const word = ' ' + t;
   const substr = t.length >= 4;
   const wordHit = (p: Photo) => { const h = hayOf(p); return h.includes(word) || (substr && h.includes(t)); };

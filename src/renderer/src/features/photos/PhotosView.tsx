@@ -60,7 +60,7 @@ export default function PhotosView() {
           <MapPinOff size={14} />{t('photos.noLocation')}
         </button>
         <FilterButton />
-        <Button variant="ghost" size="sm" icon={<ArrowDownUp size={14} />} aria-haspopup="menu" aria-label={t('photos.sort')}
+        <Button variant="ghost" size="sm" icon={<ArrowDownUp size={14} />} aria-haspopup="menu" title={t('photos.sort')}
           onClick={(e) => { const r = e.currentTarget.getBoundingClientRect(); setMenu({ x: r.right - 200, y: r.bottom + 6 }); }}>
           {sort === 'desc' ? t('photos.sort.desc') : t('photos.sort.asc')}
         </Button>
@@ -68,7 +68,7 @@ export default function PhotosView() {
           options={[{ value: 's', label: 'S', title: t('photos.density.s') }, { value: 'm', label: 'M', title: t('photos.density.m') }, { value: 'l', label: 'L', title: t('photos.density.l') }]} />
       </header>
       <div className="pv__body">
-        <PhotoGrid photos={list} loading={loading} emptyState={empty} scrollKey="photos" />
+        <PhotoGrid photos={list} loading={loading} emptyState={empty} scrollKey="photos" resetScrollOn={`${sort}|${groupBy}|${density}|${filters.query}|${filters.range}|${activeFilterCount(filters)}|${filters.cameras}|${filters.cities}|${filters.countries}|${filters.tags}|${filters.kinds}|${filters.location}|${filters.minRating}|${filters.favoritesOnly}`} />
       </div>
       {menu && <Menu x={menu.x} y={menu.y} items={sortMenu} onClose={closeMenu} />}
     </section>

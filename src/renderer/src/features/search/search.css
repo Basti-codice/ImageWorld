@@ -14,9 +14,9 @@
 
 /* ---------------------------------------------------------------- command palette */
 .cp-backdrop { position: fixed; inset: 0; z-index: var(--z-dialog); display: flex; justify-content: center; align-items: flex-start; padding-top: min(13vh, 120px);
-  background: rgba(5, 7, 10, .5); backdrop-filter: blur(3px); animation: iw-fade-in var(--dur-fast) var(--ease); }
+  background: color-mix(in srgb, var(--overlay) 62%, transparent); backdrop-filter: blur(3px); animation: iw-fade-in var(--dur-fast) var(--ease); }
 .cp { width: min(660px, calc(100vw - 48px)); max-height: min(620px, calc(100vh - 140px)); display: flex; flex-direction: column; border-radius: var(--r-xl); overflow: hidden;
-  box-shadow: var(--shadow-3); animation: iw-pop-in var(--dur) var(--ease); }
+  background: color-mix(in srgb, var(--surface-1) 95%, transparent); backdrop-filter: blur(24px) saturate(1.2); box-shadow: var(--shadow-3); animation: iw-pop-in var(--dur) var(--ease); }
 .cp__input { display: flex; align-items: center; gap: 12px; height: 56px; padding: 0 16px 0 20px; border-bottom: 1px solid var(--border); color: var(--text-3); flex: none; }
 .cp__input input { flex: 1; min-width: 0; height: 100%; background: none; border: 0; outline: none; font-size: 16px; color: var(--text); user-select: text; }
 .cp__x { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--surface-4); color: var(--text-2); }
@@ -62,7 +62,8 @@
 .af-chip__x:hover { background: var(--surface-4); color: var(--text); }
 
 /* ---------------------------------------------------------------- filter popover */
-.fp { position: fixed; z-index: var(--z-overlay); width: 340px; max-height: min(640px, calc(100vh - 80px)); display: flex; flex-direction: column; border-radius: var(--r-lg); overflow: hidden; animation: iw-pop-in var(--dur) var(--ease); }
+.fp { position: fixed; z-index: var(--z-overlay); width: 340px; max-height: min(640px, calc(100vh - 80px)); display: flex; flex-direction: column; border-radius: var(--r-lg); overflow: hidden; animation: iw-pop-in var(--dur) var(--ease);
+  background: color-mix(in srgb, var(--surface-1) 96%, transparent); backdrop-filter: blur(24px) saturate(1.2); box-shadow: var(--shadow-3); }
 .fp__head { display: flex; align-items: center; gap: 6px; padding: 12px 12px 10px 16px; flex: none; }
 .fp__head h3 { font-size: 14px; margin-right: auto; }
 .fp__scroll { overflow-y: auto; padding: 0 16px 8px; min-height: 0; flex: 1; }

@@ -69,7 +69,7 @@ export function Dialog({ title, onClose, children, footer, wide, size, flush, cl
     const token = Symbol('dialog'); dialogStack.push(token);
     const el = ref.current!;
     const prev = document.activeElement as HTMLElement | null;
-    const focusables = () => Array.from(el.querySelectorAll<HTMLElement>(FOCUSABLE)).filter((n) => n.offsetParent !== null || n === document.activeElement);
+    const focusables = () => Array.from(el.querySelectorAll<HTMLElement>(FOCUSABLE)).filter((n) => n.tabIndex >= 0 && (n.offsetParent !== null || n === document.activeElement));
     (el.querySelector<HTMLElement>('[data-autofocus]') ?? focusables()[0] ?? el).focus({ preventScroll: true });
     const h = (e: KeyboardEvent | globalThis.KeyboardEvent) => {
       if (dialogStack[dialogStack.length - 1] !== token) return;
@@ -142,18 +142,22 @@ export interface MenuItem { label: string; icon?: ReactNode; danger?: boolean; o
 export function Menu({ x, y, items, onClose }: { x: number; y: number; items: MenuItem[]; onClose: () => void }) {
   const ref = useRef<HTMLDivElement>(null);
   const [pos, setPos] = useState<CSSProperties>({ left: x, top: y, visibility: 'hidden' });
+  const [placed, setPlaced] = useState(false);
   const closeRef = useRef(onClose); closeRef.current = onClose;
   const typed = useRef({ s: '', t: 0 });
 
   useLayoutEffect(() => {
     const r = ref.current!.getBoundingClientRect();
     setPos({ left: Math.max(8, Math.min(x, innerWidth - r.width - 8)), top: Math.max(8, Math.min(y, innerHeight - r.height - 8)) });
+    setPlaced(true);
   }, [x, y]);
+
+  // focus only once the menu is visible (hidden elements cannot take focus)
+  useEffect(() => { if (placed) ref.current?.focus({ preventScroll: true }); }, [placed]);
 
   useEffect(() => {
     const prev = document.activeElement as HTMLElement | null;
     const el = ref.current!;
-    el.focus({ preventScroll: true });
     const close = (e: Event) => { if (!el.contains(e.target as Node)) closeRef.current(); };
     const blur = () => closeRef.current();
     addEventListener('mousedown', close, true); addEventListener('blur', blur); addEventListener('resize', blur);

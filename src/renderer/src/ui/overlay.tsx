@@ -124,6 +124,7 @@ const resolveAnchor = (a: PopoverProps['anchor']) => (a && 'current' in a ? a.cu
 export function Popover({ open, onClose, anchor, side = 'bottom', align = 'end', offset = 8, width, className, label, children }: PopoverProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [pos, setPos] = useState<CSSProperties>({ left: 0, top: 0, visibility: 'hidden' });
+  const [placed, setPlaced] = useState(false);
   const closeRef = useRef(onClose); closeRef.current = onClose;
 
   useLayoutEffect(() => {
@@ -143,7 +144,7 @@ export function Popover({ open, onClose, anchor, side = 'bottom', align = 'end',
       }
       left = Math.max(8, Math.min(left, innerWidth - pr.width - 8));
       top = Math.max(8, Math.min(top, innerHeight - pr.height - 8));
-      setPos({ left, top });
+      setPos({ left, top }); setPlaced(true);
     };
     place();
     const ro = new ResizeObserver(place); ro.observe(el);
@@ -155,7 +156,6 @@ export function Popover({ open, onClose, anchor, side = 'bottom', align = 'end',
     if (!open) return;
     const a = resolveAnchor(anchor);
     const prev = document.activeElement as HTMLElement | null;
-    ref.current?.focus({ preventScroll: true });
     const down = (e: Event) => {
       const t = e.target as Node;
       if (ref.current?.contains(t) || a?.contains(t)) return;
@@ -172,6 +172,8 @@ export function Popover({ open, onClose, anchor, side = 'bottom', align = 'end',
       if (inside) (a && a.isConnected ? a : prev)?.focus?.({ preventScroll: true });
     };
   }, [open, anchor]);
+
+  useEffect(() => { if (!open) setPlaced(false); else if (placed) ref.current?.focus({ preventScroll: true }); }, [open, placed]);
 
   if (!open) return null;
   return createPortal(

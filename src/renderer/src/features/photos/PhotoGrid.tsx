@@ -5,7 +5,6 @@ import type { Photo } from '@shared/types';
 import clsx from 'clsx';
 import { tn, useT, useLang } from '@/i18n';
 import { useUi } from '@/state/ui';
-import { useLibrary } from '@/state/library';
 import { thumbUrl } from '@/lib/media';
 import { fmtDate, fmtDuration } from '@/lib/format';
 import { computeLayout, firstRowAtOrBelow, rowOfIndex, HEADING_H, type HeadingRow, type PhotoRow, type Row } from './layout';
@@ -29,6 +28,8 @@ export interface PhotoGridProps {
   loading?: boolean;
   /** remembers the scroll position across unmounts under this key */
   scrollKey?: string;
+  /** scrolls back to the top whenever this value changes (e.g. filters / sort order) */
+  resetScrollOn?: unknown;
   /** override the shared preference (S/M/L) */
   density?: Density;
   /** override the shared preference (day/month headings) */
@@ -40,7 +41,7 @@ const PAD_R_SCRUB = 40;
 const PAD_R = 16;
 const scrollMemory = new Map<string, number>();
 
-const thumbSizeFor = (rowH: number): 256 | 512 => (rowH > 200 ? 512 : 256);
+const thumbSizeFor = (rowH: number): 256 | 512 => (rowH * 1.5 * Math.max(1, window.devicePixelRatio || 1) > 290 ? 512 : 256);
 
 /* ---------------------------------------------------------------- cell */
 
@@ -95,6 +96,23 @@ const Heading = memo(function Heading({ row, sticky, allSelected, labels, lang, 
   );
 });
 
+/* ------------------------------------------------------------------ row */
+
+const RowView = memo(function RowView({ row, y, photos, contentW, selection, cursor, size, labels }: {
+  row: PhotoRow; y: number; photos: Photo[]; contentW: number; selection: Set<string>; cursor: number; size: 256 | 512; labels: CellLabels;
+}) {
+  return (
+    <div className="pg__rowwrap" style={{ height: row.h, transform: `translateY(${y}px)` }}>
+      <div className="pg__row" style={{ left: PAD_L, width: contentW, height: row.imgH }}>
+        {row.items.map((it) => {
+          const p = photos[it.index];
+          return <Cell key={p.id} photo={p} index={it.index} x={it.x} w={it.w} h={row.imgH} selected={selection.has(p.id)} focused={cursor === it.index} size={size} labels={labels} />;
+        })}
+      </div>
+    </div>
+  );
+});
+
 /* ------------------------------------------------------------- skeleton */
 
 function Skeleton({ rowHeight, grouped }: { rowHeight: number; grouped: boolean }) {
@@ -115,7 +133,7 @@ function Skeleton({ rowHeight, grouped }: { rowHeight: number; grouped: boolean 
 
 /* ----------------------------------------------------------------- grid */
 
-export function PhotoGrid({ photos, emptyState, header, grouped = true, onOpen, loading, scrollKey, density: densityProp, groupBy: groupByProp }: PhotoGridProps) {
+export function PhotoGrid({ photos, emptyState, header, grouped = true, onOpen, loading, scrollKey, resetScrollOn, density: densityProp, groupBy: groupByProp }: PhotoGridProps) {
   const t = useT();
   const lang = useLang((s) => s.lang);
   const prefs = usePhotoPrefs();
@@ -132,6 +150,8 @@ export function PhotoGrid({ photos, emptyState, header, grouped = true, onOpen, 
   const [headerH, setHeaderH] = useState(0);
   const [cursor, setCursor] = useState(-1);
   const [hasFocus, setHasFocus] = useState(false);
+  /** keyboard focus ring is only shown for keyboard users, not after mouse clicks */
+  const [ring, setRing] = useState(false);
   const anchor = useRef(-1);
   const suppressClick = useRef(false);
 
@@ -200,6 +220,13 @@ export function PhotoGrid({ photos, emptyState, header, grouped = true, onOpen, 
     return () => { el.removeEventListener('scroll', onScroll); cancelAnimationFrame(raf); };
   }, [scrollKey]);
 
+  const prevReset = useRef(resetScrollOn);
+  useLayoutEffect(() => {
+    if (prevReset.current === resetScrollOn) return;
+    prevReset.current = resetScrollOn;
+    scrollerRef.current!.scrollTop = 0; setCursor(-1); anchor.current = -1;
+  }, [resetScrollOn]);
+
   // ---- opening / menu
   const openAt = useCallback((i: number) => {
     if (onOpen) onOpen(i);
@@ -243,6 +270,7 @@ export function PhotoGrid({ photos, emptyState, header, grouped = true, onOpen, 
 
   const onKeyDown = (e: React.KeyboardEvent) => {
     if (!photos.length) return;
+    if (!e.ctrlKey && !e.metaKey && !e.altKey) setRing(true);
     const ui = useUi.getState();
     const cur = cursor >= 0 ? cursor : 0;
     const extend = e.shiftKey;
@@ -350,6 +378,7 @@ export function PhotoGrid({ photos, emptyState, header, grouped = true, onOpen, 
   const onPointerDown = (e: React.PointerEvent) => {
     if (e.button !== 0 || !layout.photoRows.length) return;
     const target = e.target as HTMLElement;
+    setRing(false);
     if (target.closest('[data-act], .pg__header, .ph__check')) return;
     const el = scroller();
     const rect = el.getBoundingClientRect();
@@ -417,18 +446,27 @@ export function PhotoGrid({ photos, emptyState, header, grouped = true, onOpen, 
     <div className="pg">
       <div
         ref={scrollerRef} className={clsx('pg__scroll', grouped && 'pg__scroll--scrub', selecting && 'pg--selecting')}
-        role="listbox" aria-multiselectable="true" aria-label={t('photos.grid.label')} tabIndex={0}
-        aria-activedescendant={hasFocus && cursor >= 0 && photos[cursor] ? `pc-${photos[cursor].id}` : undefined}
-        onKeyDown={onKeyDown} onClick={onClick} onDoubleClick={onDoubleClick} onContextMenu={onContextMenu}
+        onClick={onClick} onDoubleClick={onDoubleClick} onContextMenu={onContextMenu}
         onPointerDown={onPointerDown} onPointerOver={onPointerOver} onPointerLeave={onPointerLeave}
-        onFocus={(e) => { setHasFocus(true); if (cursor < 0 && e.target === e.currentTarget && photos.length) { const first = layout.photoRows[rowOfIndex(layout.photoRows, 0)]; setCursor(first?.first ?? 0); } }}
-        onBlur={() => setHasFocus(false)}
       >
         {header && <div ref={headerRef} className="pg__header">{header}</div>}
         {loading ? <Skeleton rowHeight={rowHeight} grouped={grouped} />
           : empty ? <div className="pg__empty">{emptyState}</div>
             : (
-              <div className="pg__canvas" style={{ height: layout.total + GRID_BOTTOM_PAD, paddingBottom: GRID_BOTTOM_PAD }}>
+              <div
+                className="pg__canvas" style={{ height: layout.total + GRID_BOTTOM_PAD, paddingBottom: GRID_BOTTOM_PAD }}
+                role="listbox" aria-multiselectable="true" aria-label={t('photos.grid.label')} tabIndex={0}
+                aria-activedescendant={hasFocus && cursor >= 0 && photos[cursor] ? `pc-${photos[cursor].id}` : undefined}
+                onKeyDown={onKeyDown}
+                onFocus={(e) => {
+                  setHasFocus(true);
+                  if (e.target === e.currentTarget) {
+                    setRing(e.currentTarget.matches(':focus-visible'));
+                    if (cursor < 0 && photos.length) { const first = layout.photoRows[rowOfIndex(layout.photoRows, 0)]; setCursor(first?.first ?? 0); }
+                  }
+                }}
+                onBlur={() => { setHasFocus(false); setRing(false); }}
+              >
                 {items.map((vi) => {
                   const row = layout.rows[vi.index];
                   if (!row) return null;
@@ -441,16 +479,8 @@ export function PhotoGrid({ photos, emptyState, header, grouped = true, onOpen, 
                       </div>
                     );
                   }
-                  return (
-                    <div key={vi.index} className="pg__rowwrap" style={{ height: row.h, transform: `translateY(${vi.start - headerH}px)` }}>
-                      <div className="pg__row" style={{ left: PAD_L, width: contentW, height: row.imgH }}>
-                        {row.items.map((it) => {
-                          const p = photos[it.index];
-                          return <Cell key={p.id} photo={p} index={it.index} x={it.x} w={it.w} h={row.imgH} selected={selection.has(p.id)} focused={hasFocus && cursor === it.index} size={size} labels={labels} />;
-                        })}
-                      </div>
-                    </div>
-                  );
+                  const inRow = hasFocus && ring && cursor >= row.first && cursor < row.first + row.items.length ? cursor : -1;
+                  return <RowView key={vi.index} row={row} y={vi.start - headerH} photos={photos} contentW={contentW} selection={selection} cursor={inRow} size={size} labels={labels} />;
                 })}
               </div>
             )}

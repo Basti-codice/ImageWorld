@@ -17,6 +17,7 @@ describe('offline reverse geocoding', () => {
     [40.7128, -74.006, 'New York City', 'United States', 'US'],
     [-22.9068, -43.1729, 'Rio de Janeiro', 'Brazil', 'BR'],
     [-33.8688, 151.2093, 'Sydney', 'Australia', 'AU'],
+    [52.52, 13.405, 'Berlin', 'Germany', 'DE'], // district "Mitte" is lifted to the city
   ])('(%d, %d) → %s', (lat, lon, city, country, cc) => {
     const p = idx.reverse(lat, lon);
     expect(p).toBeTruthy();

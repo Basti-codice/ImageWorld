@@ -13,8 +13,10 @@ export interface Viewport {
   bearing: number;
   /** the photo array handed to setPhotos */
   photos: Photo[];
-  /** indices into `photos` of photos inside the viewport, newest first */
+  /** indices into `photos` of photos inside the viewport, newest first (capped at 4000) */
   inView: number[];
+  /** total number of photos inside the viewport */
+  inViewCount: number;
 }
 
 export interface ControllerHooks {
@@ -155,8 +157,8 @@ export class MapController {
       id: 'iw-heat', type: 'heatmap', source: 'iw-heat', layout: { visibility: this.heatmap ? 'visible' : 'none' },
       paint: {
         'heatmap-weight': 1,
-        'heatmap-intensity': ['interpolate', ['linear'], ['zoom'], 0, 0.55, 5, 0.9, 10, 1.6, 14, 2.4],
-        'heatmap-radius': ['interpolate', ['exponential', 1.7], ['zoom'], 0, 5, 4, 14, 8, 26, 12, 42, 16, 70],
+        'heatmap-intensity': ['interpolate', ['linear'], ['zoom'], 0, 0.1, 4, 0.14, 8, 0.4, 12, 1.1, 16, 2.4],
+        'heatmap-radius': ['interpolate', ['exponential', 1.6], ['zoom'], 0, 14, 3, 26, 6, 36, 10, 52, 14, 76, 17, 100],
         'heatmap-opacity': ['interpolate', ['linear'], ['zoom'], 0, 0.92, 9, 0.85, 14, 0.2, 17, 0],
         'heatmap-color': ['interpolate', ['linear'], ['heatmap-density'], 0, hexA(cssVar('--heat-1'), 0), 0.1, hexA(cssVar('--heat-1'), 0.35), 0.3, hexA(cssVar('--heat-2'), 0.7), 0.52, hexA(cssVar('--heat-3'), 0.8), 0.76, hexA(cssVar('--heat-4'), 0.9), 1, cssVar('--heat-5')],
       },
@@ -299,8 +301,8 @@ export class MapController {
       if (lo < w) w = lo; if (lo > e) e = lo; if (la < s) s = la; if (la > n) n = la;
     }
     const m = this.map;
-    const cam = m.cameraForBounds([[w, s], [e, n]], { padding: { top: 120, bottom: 200, left: 120, right: 120 }, maxZoom: 10 });
-    const zoom = Math.max(2.2, Math.min(10, cam?.zoom ?? 6));
+    const cam = m.cameraForBounds([[w, s], [e, n]], { padding: { top: 120, bottom: 200, left: 120, right: 120 }, maxZoom: 8 });
+    const zoom = Math.max(2.2, Math.min(8, cam?.zoom ?? 6));
     const dur = prefersReducedMotion() ? 0 : 1100;
     m.easeTo({ center: [(w + e) / 2, (s + n) / 2], zoom: Math.abs(zoom - m.getZoom()) < 0.35 ? m.getZoom() : zoom, duration: dur, essential: false });
   }
@@ -356,7 +358,7 @@ export class MapController {
       const c = m.getCenter();
       inView = inView.filter((i) => angularDistance(c.lng, c.lat, this.ix.lon[i], this.ix.lat[i]) < 80);
     }
-    this.hooks.viewport({ bounds: [b.getWest(), b.getSouth(), b.getEast(), b.getNorth()], zoom: z, bearing: m.getBearing(), photos: this.photos, inView });
+    this.hooks.viewport({ bounds: [b.getWest(), b.getSouth(), b.getEast(), b.getNorth()], zoom: z, bearing: m.getBearing(), photos: this.photos, inView: inView.length > 4000 ? inView.slice(0, 4000) : inView, inViewCount: inView.length });
   }
 
   // ------------------------------------------------------------------ interaction

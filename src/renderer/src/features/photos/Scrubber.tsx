@@ -5,7 +5,6 @@ import type { GridLayout, Mark } from './layout';
 
 /** padding below the last row inside the scroller – must match `.pg__canvas` bottom spacing in photos.css */
 export const GRID_BOTTOM_PAD = 32;
-const TRACK_PAD = 10;
 
 /** last mark whose top <= y */
 function markAt(marks: Mark[], y: number): Mark | undefined {
@@ -128,4 +127,3 @@ export default function Scrubber({ scrollerRef, layout, headerH }: { scrollerRef
   );
 }
 
-export { TRACK_PAD };

@@ -66,7 +66,7 @@ export function Tabs<T extends string>({ value, onChange, items, variant = 'unde
       {items.map((it, i) => (
         <button
           key={it.value} ref={(el) => { refs.current[i] = el; }} role="tab" id={tabId(prefix, it.value)} aria-controls={panelId(prefix, it.value)}
-          aria-selected={it.value === value} tabIndex={it.value === value ? 0 : -1} disabled={it.disabled}
+          aria-selected={it.value === value} data-autofocus={it.value === value ? '' : undefined} tabIndex={it.value === value ? 0 : -1} disabled={it.disabled}
           className="tabs__tab" onClick={() => onChange(it.value)}
         >
           {it.icon}<span>{it.label}</span>{it.count != null && <span className="tabs__count tabular">{it.count}</span>}

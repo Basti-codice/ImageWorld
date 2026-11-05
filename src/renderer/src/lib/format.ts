@@ -1,8 +1,20 @@
 import { currentLocale } from '@/i18n';
 
-export const fmtNumber = (n: number) => new Intl.NumberFormat(currentLocale()).format(n);
-export const fmtDate = (ms: number, opts: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'long', year: 'numeric' }) =>
-  new Intl.DateTimeFormat(currentLocale(), { timeZone: 'UTC', ...opts }).format(ms); // takenAt is stored as "local-as-UTC"
+const nfCache = new Map<string, Intl.NumberFormat>();
+export const fmtNumber = (n: number) => {
+  const locale = currentLocale();
+  let f = nfCache.get(locale);
+  if (!f) { f = new Intl.NumberFormat(locale); nfCache.set(locale, f); }
+  return f.format(n);
+};
+const dtfCache = new Map<string, Intl.DateTimeFormat>();
+export const fmtDate = (ms: number, opts: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'long', year: 'numeric' }) => {
+  // Intl.DateTimeFormat construction is expensive – cache per locale + options (grids format thousands of dates)
+  const locale = currentLocale(), key = locale + JSON.stringify(opts);
+  let f = dtfCache.get(key);
+  if (!f) { f = new Intl.DateTimeFormat(locale, { timeZone: 'UTC', ...opts }); dtfCache.set(key, f); } // takenAt is stored as "local-as-UTC"
+  return f.format(ms);
+};
 export const fmtMonthYear = (ms: number) => fmtDate(ms, { month: 'long', year: 'numeric' });
 export const fmtTime = (ms: number) => fmtDate(ms, { hour: '2-digit', minute: '2-digit' });
 export const fmtBytes = (b: number) => {

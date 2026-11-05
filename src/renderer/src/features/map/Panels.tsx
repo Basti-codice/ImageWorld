@@ -75,7 +75,7 @@ const THUMB = 64, GAP = 6;
 
 function load(): boolean { try { return localStorage.getItem('iw.map.strip') !== '0'; } catch { return true; } }
 
-export function ViewStrip({ photos }: { photos: Photo[] }) {
+export function ViewStrip({ photos, total }: { photos: Photo[]; total: number }) {
   const t = useT();
   const [open, setOpen] = useState(load);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -93,7 +93,7 @@ export function ViewStrip({ photos }: { photos: Photo[] }) {
       <div className="mp-strip__head">
         <button className="mp-strip__toggle" onClick={toggle} aria-expanded={open} title={open ? t('map.inView.collapse') : t('map.inView.expand')}>
           {open ? <ChevronDown size={16} strokeWidth={1.75} /> : <ChevronUp size={16} strokeWidth={1.75} />}
-          <span className="tabular">{tn('map.inView.count', photos.length)}</span>
+          <span className="tabular">{tn('map.inView.count', total)}</span>
         </button>
       </div>
       {open && (

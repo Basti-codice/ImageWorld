@@ -25,9 +25,9 @@ export const shell: Bundle = {
     'sources.addFailed': 'Ordner konnte nicht hinzugefügt werden', 'sources.removed': '„{name}“ entfernt', 'sources.noFiles': 'In dieser Quelle gibt es noch keine Dateien',
     'sources.rescan': 'Neu scannen', 'sources.reveal': 'Im Explorer zeigen', 'sources.copyPath': 'Pfad kopieren', 'sources.pathCopied': 'Pfad kopiert',
     'sources.remove': 'Entfernen', 'sources.more': 'Weitere Aktionen',
-    'sources.removeTitle': '„{name}“ entfernen?', 'sources.removeBody': 'Die Quelle wird aus ImageWorld entfernt. Deine Originaldateien bleiben unverändert auf dem PC; Favoriten und Bewertungen bleiben erhalten.',
+    'sources.removeTitle': '„{name}“ entfernen?', 'sources.removeBody': 'Die Quelle wird aus ImageWorld entfernt. Die Originaldateien bleiben unverändert auf dem PC; Favoriten und Bewertungen bleiben erhalten.',
 
-    'error.title': 'Das hat nicht geklappt', 'error.body': 'Dieser Bereich konnte nicht angezeigt werden. Deine Fotos sind davon nicht betroffen.',
+    'error.title': 'Das hat nicht geklappt', 'error.body': 'Dieser Bereich konnte nicht angezeigt werden. Die Fotos sind davon nicht betroffen.',
     'error.retry': 'Erneut versuchen', 'error.reload': 'App neu laden', 'error.details': 'Technische Details',
     'drop.title': 'Ordner hier ablegen', 'drop.hint': 'Die Fotos bleiben an ihrem Ort – ImageWorld liest sie nur.', 'drop.onlyFolders': 'Bitte einen Ordner ablegen, keine einzelnen Dateien',
   },

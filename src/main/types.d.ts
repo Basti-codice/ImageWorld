@@ -4,3 +4,4 @@ declare module '*?modulePath' {
   export default path;
 }
 declare module 'libheif-js/wasm-bundle';
+declare module 'libheif-js/wasm-bundle.js';

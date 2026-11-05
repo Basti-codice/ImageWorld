@@ -4,6 +4,8 @@ import clsx from 'clsx';
 import { IconButton, Kbd } from '@/ui';
 import { useT } from '@/i18n';
 import { useUi } from '@/state/ui';
+import { useLibrary } from '@/state/library';
+import { warmTextIndex } from '@/lib/filter';
 import FilterButton from './FilterButton';
 import FilterPopover from './FilterPopover';
 import './search.css';
@@ -14,6 +16,10 @@ export default function SearchBox() {
   const query = useUi((s) => s.filters.query);
   const open = useUi((s) => s.commandPaletteOpen);
   const setOpen = useUi((s) => s.setCommandPalette);
+
+  // build the search index in idle time (first query on 100k photos stays instant)
+  const photos = useLibrary((s) => s.photos);
+  useEffect(() => { warmTextIndex(photos); }, [photos]);
 
   // "/" opens the palette like in most web apps (not while typing somewhere)
   useEffect(() => {

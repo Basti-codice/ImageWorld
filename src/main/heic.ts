@@ -17,7 +17,7 @@ interface HeifImage {
 let lib: LibHeif | null = null;
 async function getLib(): Promise<LibHeif> {
   if (!lib) {
-    const m = (await import('libheif-js/wasm-bundle')) as unknown as { default?: LibHeif } & LibHeif;
+    const m = (await import('libheif-js/wasm-bundle.js')) as unknown as { default?: LibHeif } & LibHeif;
     lib = (m.default && (m.default as LibHeif).HeifDecoder ? m.default : m) as LibHeif;
   }
   return lib;

@@ -52,7 +52,7 @@ function build(holder: HTMLElement, pts: Pt[], o: { dark: boolean; styleId: Retu
     container: holder, style, interactive: o.interactive, attributionControl: o.interactive ? { compact: true } : false,
     fadeDuration: 0, pixelRatio: Math.min(window.devicePixelRatio || 1, 2), renderWorldCopies: false, maxPitch: 0, dragRotate: false,
     canvasContextAttributes: { antialias: true, preserveDrawingBuffer: !o.interactive },
-    ...(pts.length === 1 ? { center: [pts[0].lon, pts[0].lat] as [number, number], zoom: 8 } : { bounds: bb as LngLatBoundsLike, fitBoundsOptions: { padding: Math.min(28, Math.round(Math.min(o.width, o.height) / 5)), maxZoom: 10, duration: 0 } }),
+    ...(pts.length === 1 ? { center: [pts[0].lon, pts[0].lat] as [number, number], zoom: 6 } : { bounds: bb as LngLatBoundsLike, fitBoundsOptions: { padding: Math.min(28, Math.round(Math.min(o.width, o.height) / 5)), maxZoom: 7, duration: 0 } }),
   });
   map.on('error', () => undefined);
   map.on('load', () => {
