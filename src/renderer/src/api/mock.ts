@@ -106,6 +106,27 @@ export function installMockApi(): void {
     albums = [{ id: 'a1', name: 'Japan 2024', createdAt: Date.now(), updatedAt: Date.now(), photoIds: sample.map((p) => p.id), coverPhotoId: sample[0]?.id, color: '#4b94ff' }];
   }
   const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+  const emitSources = () => subs.src.forEach((cb) => cb(sources));
+  const patchSource = (id: string, patch: Partial<Source>) => { sources = sources.map((x) => (x.id === id ? { ...x, ...patch } : x)); emitSources(); };
+  /** demo scan: streams the demo library in batches (with progress events) – lets onboarding / sync UI be exercised in the browser */
+  const simulateScan = (src: Source) => {
+    const pool = genPhotos().map((p) => ({ ...p, sourceId: src.id }));
+    const total = pool.length; let done = 0;
+    patchSource(src.id, { status: 'scanning' });
+    const tick = () => {
+      const batch = pool.slice(done, done + Math.ceil(total / 36)); done += batch.length;
+      photos = [...photos, ...batch];
+      subs.lib.forEach((cb) => cb({ added: batch, updated: [], removedIds: [] }));
+      subs.prog.forEach((cb) => cb({ sourceId: src.id, phase: done < total ? (done < total * 0.7 ? 'reading' : 'thumbnails') : 'done', done, total }));
+      patchSource(src.id, { photoCount: done });
+      if (done < total) setTimeout(tick, 220); else patchSource(src.id, { status: 'idle', lastScan: Date.now() });
+    };
+    setTimeout(tick, 400);
+  };
+  /** `?scan=1` / `?offline=1` / `?error=1`: put the OneDrive demo source into that state (sync pill, sidebar, popover) */
+  if (params.get('scan')) { let d = 0; const id = 'src-od'; sources = sources.map((x) => (x.id === id ? { ...x, status: 'scanning' } : x)); setInterval(() => { d = (d + 37) % 4800; subs.prog.forEach((cb) => cb({ sourceId: id, phase: d < 1800 ? 'reading' : 'thumbnails', done: d, total: 4800 })); }, 300); }
+  if (params.get('offline')) sources = sources.map((x) => (x.id === 'src-od' ? { ...x, status: 'offline' } : x));
+  if (params.get('error')) sources = sources.map((x) => (x.id === 'src-od' ? { ...x, status: 'error', error: 'Zugriff verweigert' } : x));
 
   const api: ImageWorldApi = {
     platform: 'web',
@@ -118,8 +139,8 @@ export function installMockApi(): void {
     },
     sources: {
       list: async () => sources,
-      pickAndAdd: async () => { await sleep(200); return []; },
-      add: async (path) => { const s: Source = { id: `src-${Date.now()}`, path, label: path.split(/[\\/]/).pop() || path, kind: 'local', status: 'idle', photoCount: 0, lastScan: Date.now() }; sources = [...sources, s]; subs.src.forEach((cb) => cb(sources)); return s; },
+      pickAndAdd: async () => { await sleep(200); return params.get('empty') && !sources.length ? [await api.sources.add('C:\\Users\\Demo\\Pictures')] : []; },
+      add: async (path) => { const s: Source = { id: `src-${Date.now()}`, path, label: path.split(/[\\/]/).pop() || path, kind: /onedrive/i.test(path) ? 'onedrive' : 'local', status: 'idle', photoCount: 0, lastScan: Date.now() }; sources = [...sources, s]; emitSources(); if (params.get('empty')) simulateScan(s); return s; },
       remove: async (id) => { sources = sources.filter((s) => s.id !== id); subs.src.forEach((cb) => cb(sources)); },
       rescan: async () => {},
       onChanged: (cb) => sub(subs.src, cb),

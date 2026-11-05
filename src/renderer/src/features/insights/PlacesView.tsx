@@ -225,7 +225,7 @@ export default function PlacesView() {
             </section>
             <aside className="pside">
               <div className="ins-card pside__top">
-                <h3>{t('places.stat.photos')}</h3>
+                <h3>{t('places.top')}</h3>
                 <ul>
                   {top.map((c) => (
                     <li key={c.cc}>
@@ -239,10 +239,12 @@ export default function PlacesView() {
               </div>
               {agg.withoutPlace > 0 && (
                 <div className="ins-card pside__none">
-                  <MapPinOff size={18} strokeWidth={1.6} />
-                  <div>
-                    <b>{tn('places.noPlace', agg.withoutPlace)}</b>
-                    <p>{t('places.noPlace.hint')}</p>
+                  <div className="pside__none-t">
+                    <MapPinOff size={18} strokeWidth={1.6} />
+                    <div>
+                      <b>{tn('places.noPlace', agg.withoutPlace)}</b>
+                      <p>{t('places.noPlace.hint')}</p>
+                    </div>
                   </div>
                   <Button size="sm" onClick={() => { const ui = useUi.getState(); ui.resetFilters(); ui.setFilters({ location: 'without' }); ui.setView('photos'); }}>{t('places.act.photos')}</Button>
                 </div>

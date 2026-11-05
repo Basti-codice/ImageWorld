@@ -117,7 +117,9 @@ export default function TimelineChart({ ix, trips, bounds, onZoomedChange, fitSi
   const [view, setViewState] = useState<Range>(() => (ix ? fitView(ix) : [Date.now() - 365 * DAY, Date.now()]));
   const viewRef = useRef(view);
   const userZoomed = useRef(false);
-  const [draft, setDraft] = useState<Range | null>(null);
+  const [draft, setDraftState] = useState<Range | null>(null);
+  const draftRef = useRef<Range | null>(null);
+  const setDraft = useCallback((r: Range | null) => { draftRef.current = r; setDraftState(r); }, []);
   const [hover, setHover] = useState<Hover>(null);
   const [focused, setFocused] = useState(false);
   const drag = useRef<Drag | null>(null);
@@ -332,7 +334,9 @@ export default function TimelineChart({ ix, trips, bounds, onZoomedChange, fitSi
     plotRef.current!.style.cursor = '';
     if (d.kind === 'pan') return;
     if (!d.moved) { if (!cancelled && e.type === 'pointerup' && d.kind === 'new' && st.current.sel) commit(null, true); return; }
-    setDraft((r) => { if (r && !cancelled) commit(r, true); return null; });
+    const r = draftRef.current;
+    setDraft(null);
+    if (r && !cancelled) commit(r, true);
   };
 
   const onDoubleClick = (e: React.MouseEvent) => {

@@ -32,7 +32,7 @@
 
 .tl-body { position: relative; flex: 1; min-height: 0; margin: 0 14px; }
 .tl-plot { position: relative; touch-action: none; outline: none; border-radius: var(--r-xs); }
-.tl-plot:focus-visible { outline: 2px solid var(--accent-ring); outline-offset: 3px; box-shadow: none; }
+.tl-plot:focus-visible { outline: 1px solid var(--accent-ring); outline-offset: 2px; box-shadow: none; }
 .tl-canvas { position: absolute; left: 0; top: 0; display: block; pointer-events: none; }
 .tl-empty { position: absolute; left: 0; right: 0; top: 0; height: 64px; display: grid; place-items: center; color: var(--text-3); font-size: var(--fs-sm); pointer-events: none; }
 
@@ -55,8 +55,8 @@
 .tl-tip i { width: 3px; height: 3px; border-radius: 50%; background: var(--text-3); }
 
 .tl-lane { position: absolute; left: 0; right: 0; top: 88px; height: 20px; }
-.tl-trip { position: absolute; top: 0; height: 20px; display: flex; align-items: center; padding: 0 7px; border-radius: 5px; overflow: hidden; text-align: left; white-space: nowrap; font-size: var(--fs-2xs); font-weight: var(--fw-medium); background: var(--surface-3); color: var(--text-3); transition: background var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease); }
-.tl-trip span { overflow: hidden; text-overflow: ellipsis; }
+.tl-trip { position: absolute; top: 0; height: 20px; display: flex; align-items: center; padding: 0; border-radius: 4px; overflow: hidden; text-align: left; white-space: nowrap; font-size: var(--fs-2xs); font-weight: var(--fw-medium); background: var(--surface-3); color: var(--text-3); transition: background var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease); }
+.tl-trip span { overflow: hidden; text-overflow: ellipsis; padding: 0 7px; }
 .tl-trip:hover { background: var(--surface-4); color: var(--text); }
 .tl-trip[data-away] { background: var(--accent-soft); color: var(--accent-text); }
 .tl-trip[data-away]:hover { background: color-mix(in srgb, var(--accent) 28%, transparent); }

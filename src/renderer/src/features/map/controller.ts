@@ -433,7 +433,7 @@ export class MapController {
       return;
     }
     const cam = m.cameraForBounds([[w, s], [e, n]], { padding: PAD, maxZoom: 14 });
-    run(cam?.center ? [cam.center.lng, cam.center.lat] : [(w + e) / 2, (s + n) / 2], cam?.zoom ?? 4);
+    run([(w + e) / 2, (s + n) / 2], cam?.zoom ?? 4);
   }
 
   flyToRequest(r: { bbox?: [number, number, number, number]; center?: [number, number]; zoom?: number }) {

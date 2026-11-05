@@ -3,7 +3,7 @@ import { ExifTool } from 'exiftool-vendored';
 import { cpus } from 'node:os';
 import { basename } from 'node:path';
 import type { MediaKind } from '@shared/types';
-import { RAW_EXT, VIDEO_EXT, warn } from './util';
+import { HEIF_EXT, RAW_EXT, VIDEO_EXT, warn } from './util';
 
 export interface ParsedMeta {
   takenAt: number | null;
@@ -169,9 +169,11 @@ export function combineCamera(make?: string, model?: string): string | undefined
   return `${nice} ${md}`;
 }
 
-function orientationSwap(o: number | undefined, rotation: number | undefined): boolean {
+function orientationSwap(o: number | undefined, rotation: number | undefined, ext: string): boolean {
   if (o !== undefined && o >= 1 && o <= 8) return o >= 5;
   if (rotation !== undefined) {
+    // HEIF `irot` is reported by exiftool as a quarter-turn count (0..3); QuickTime video rotation is in degrees
+    if (HEIF_EXT.has(ext)) return rotation === 1 || rotation === 3;
     const r = ((Math.round(rotation) % 360) + 360) % 360;
     return r === 90 || r === 270;
   }
@@ -203,7 +205,7 @@ export function parseTags(t: Tags, ctx: { ext: string; kind: MediaKind; name: st
   if (!w || !h) { w = ew ?? w; h = eh ?? h; }
   w = w ?? 0;
   h = h ?? 0;
-  if (orientationSwap(num(t.Orientation), num(t.Rotation))) [w, h] = [h, w];
+  if (orientationSwap(num(t.Orientation), num(t.Rotation), ctx.ext)) [w, h] = [h, w];
 
   // ---- gps
   let gps: { lat: number; lon: number } | null = null;

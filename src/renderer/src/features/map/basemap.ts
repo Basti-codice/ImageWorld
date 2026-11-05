@@ -9,13 +9,17 @@
  *     - 'satellite'        offline dark base + Esri World Imagery (+ CARTO labels) when online
  *   If online tiles fail the offline base is still complete and good looking.
  */
-import type { LayerSpecification, SourceSpecification, StyleSpecification } from 'maplibre-gl';
+import { setWorkerUrl, type LayerSpecification, type SourceSpecification, type StyleSpecification } from 'maplibre-gl';
+// MapLibre's default worker URL breaks once Vite pre-bundles/hashes the library – hand it a bundled worker explicitly.
+import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url';
 import type { Feature, FeatureCollection, Geometry, LineString, MultiLineString, Polygon, MultiPolygon, Position } from 'geojson';
 import type { GeometryCollection, Topology } from 'topojson-specification';
 import { feature, mesh } from 'topojson-client';
 import atlas50 from 'world-atlas/countries-50m.json';
 import atlas110 from 'world-atlas/countries-110m.json';
 import type { MapStyleId } from '@shared/types';
+
+try { setWorkerUrl(new URL(workerUrl, document.baseURI).href); } catch { /* keep default */ }
 
 export const LABEL_LAYER_ID = 'iw-online-labels';
 export type MapDetail = 'high' | 'low';

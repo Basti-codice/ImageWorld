@@ -1,0 +1,88 @@
+name: Build Windows
+
+on:
+  push:
+    branches: [main, 'claude/**']
+    tags: ['v*']
+  workflow_dispatch:
+
+concurrency:
+  group: build-windows-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Installer + portable zip
+    runs-on: windows-latest
+    timeout-minutes: 45
+    permissions:
+      contents: write # create the GitHub Release on tags
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Check tag matches package.json version
+        if: startsWith(github.ref, 'refs/tags/v')
+        shell: bash
+        run: |
+          pkg="v$(node -p "require('./package.json').version")"
+          if [ "$pkg" != "${GITHUB_REF_NAME}" ]; then
+            echo "::error::Tag ${GITHUB_REF_NAME} does not match package.json version ${pkg}"
+            exit 1
+          fi
+
+      # installs the win32 optional deps (@img/sharp-win32-x64, exiftool-vendored.exe) and downloads ffmpeg.exe (ffmpeg-static postinstall)
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Unit tests
+        run: npm test
+
+      - name: Build installer (NSIS) + portable zip
+        run: npm run dist
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false' # unsigned build; see README "Code-Signing"
+
+      - name: Checksums
+        shell: pwsh
+        run: |
+          Get-ChildItem release/ImageWorld-*.exe, release/ImageWorld-*.zip |
+            ForEach-Object { "$((Get-FileHash $_.FullName -Algorithm SHA256).Hash.ToLower())  $($_.Name)" } |
+            Out-File -Encoding ascii release/SHA256SUMS.txt
+          Get-Content release/SHA256SUMS.txt
+
+      - name: Upload installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: ImageWorld-Setup
+          path: |
+            release/ImageWorld-Setup-*.exe
+            release/SHA256SUMS.txt
+          if-no-files-found: error
+
+      - name: Upload portable zip
+        uses: actions/upload-artifact@v4
+        with:
+          name: ImageWorld-Portable
+          path: release/ImageWorld-Portable-*.zip
+          if-no-files-found: error
+
+      - name: Create GitHub Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          files: |
+            release/ImageWorld-Setup-*.exe
+            release/ImageWorld-Portable-*.zip
+            release/SHA256SUMS.txt

@@ -162,12 +162,12 @@ export default function InsightsView() {
 
             {hasFocal && (
               <Card className="span-4" title={t('insights.focal.title')} hint={t('insights.focal.hint')}>
-                <ColumnChart cols={focalCols} colors={[SERIES[0]]} height={215} maxWidth={26} ariaLabel={t('insights.focal.title')} />
+                <ColumnChart cols={focalCols} colors={[SERIES[0]]} height={270} maxWidth={26} ariaLabel={t('insights.focal.title')} />
               </Card>
             )}
             {hasAperture && (
               <Card className="span-4" title={t('insights.aperture.title')} hint={t('insights.aperture.hint')}>
-                <ColumnChart cols={apCols} colors={[SERIES[0]]} height={215} maxWidth={26} ariaLabel={t('insights.aperture.title')} />
+                <ColumnChart cols={apCols} colors={[SERIES[0]]} height={270} maxWidth={26} ariaLabel={t('insights.aperture.title')} />
               </Card>
             )}
             <Card className="span-4" title={t('insights.rating.title')} hint={t('insights.rating.hint', { n: fmtNumber(s.rated) })}>

@@ -33,7 +33,7 @@
 
 /* suggestions shelf */
 .alb-sugg { margin: 0 0 36px; }
-.alb-sugg__row { display: flex; gap: 20px; overflow-x: auto; padding: 4px 4px 16px; margin: 0 -4px; scroll-snap-type: x proximity; }
+.alb-sugg__row { display: flex; gap: 20px; overflow-x: auto; padding: 4px 4px 16px; margin: 0 -4px; scroll-snap-type: x proximity; scroll-padding-left: 4px; }
 .alb-sugg__card { flex: none; width: 248px; display: flex; flex-direction: column; scroll-snap-align: start; }
 .alb-sugg__cover { position: relative; aspect-ratio: 16 / 10; border-radius: var(--r-md); overflow: hidden; background: var(--surface-2); box-shadow: var(--shadow-1); }
 .alb-sugg__dismiss { position: absolute; top: 6px; right: 6px; background: var(--glass); backdrop-filter: blur(12px); opacity: 0; transition: opacity var(--dur-fast); }
@@ -44,7 +44,7 @@
 
 /* ============ Album detail ============ */
 .alb-detail { position: absolute; inset: 0; }
-.alb-hero { padding: 16px 36px 28px; position: relative; }
+.alb-hero { padding: 12px 16px 28px; position: relative; }
 .alb-hero::before { content: ''; position: absolute; inset: 0 0 auto 0; height: 100%; pointer-events: none; background: linear-gradient(to bottom, color-mix(in srgb, var(--album-color, var(--accent)) 9%, transparent), transparent 80%); }
 .alb-hero > * { position: relative; }
 .alb-hero__top { margin: 0 0 14px -10px; }

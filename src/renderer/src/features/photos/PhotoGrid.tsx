@@ -36,7 +36,7 @@ export interface PhotoGridProps {
 }
 
 const PAD_L = 16;
-const PAD_R_SCRUB = 30;
+const PAD_R_SCRUB = 40;
 const PAD_R = 16;
 const scrollMemory = new Map<string, number>();
 

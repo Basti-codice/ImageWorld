@@ -5,7 +5,7 @@ import { useUi } from '@/state/ui';
 import { useLibrary } from '@/state/library';
 import { useDerived } from '@/state/derived';
 import { usePlayback } from '@/features/timeline/playback';
-import { useT, t as tr, tn } from '@/i18n';
+import { useT, tn } from '@/i18n';
 import { Button, EmptyState } from '@/ui';
 import { effectiveMapStyle, mapBackdrop } from './basemap';
 import { MapController, type Viewport } from './controller';
@@ -210,5 +210,3 @@ export default function MapView() {
   );
 }
 
-// re-export for tests / other features that want the translated label without importing i18n directly
-export const mapLabel = (key: string) => tr(key);
