@@ -10,7 +10,7 @@ export default defineConfig({
     build: {
       rollupOptions: {
         // native / binary deps are loaded at runtime from node_modules (asar-unpacked in the installer)
-        external: ['sharp', 'exiftool-vendored', 'ffmpeg-static', 'libheif-js', 'chokidar', 'all-the-cities'],
+        external: ['sharp', 'exiftool-vendored', 'ffmpeg-static', 'chokidar', 'all-the-cities', /^libheif-js(\/.*)?$/],
       },
     },
   },

@@ -1,0 +1,17 @@
+.kit { height: 100%; overflow: auto; background: var(--bg); color: var(--text); padding: 0 0 64px; }
+.kit__top { position: sticky; top: 0; z-index: 5; display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 14px 32px; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+.kit__brand { display: flex; gap: 12px; align-items: center; } .kit__brand h1 { font-size: var(--fs-lg); } .kit__brand p { color: var(--text-3); font-size: var(--fs-sm); }
+.kit__ctl { display: flex; gap: 8px; }
+.kit__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(520px, 1fr)); gap: 20px; padding: 24px 32px; align-items: start; }
+.kit__sec { background: var(--surface-1); border-radius: var(--r-lg); box-shadow: var(--shadow-1); padding: 20px 22px 22px; }
+.kit__sec header { margin-bottom: 14px; } .kit__sec h2 { font-size: var(--fs-md); } .kit__sec header p { color: var(--text-3); margin-top: 2px; font-size: var(--fs-sm); }
+.kit__body { display: grid; gap: 16px; }
+.kit__row { display: grid; gap: 8px; } .kit__rl { font-size: var(--fs-xs); font-weight: 650; letter-spacing: .06em; text-transform: uppercase; color: var(--text-3); }
+.kit__items { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.kit__sw { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+.kit__sw i { display: block; height: 40px; border-radius: 8px; box-shadow: inset 0 0 0 1px var(--border-strong); margin-bottom: 6px; } .kit__sw b { display: block; font-size: var(--fs-sm); font-weight: 550; } .kit__sw code { font-size: 11px; color: var(--text-3); font-family: var(--font-mono); }
+.kit__type { display: grid; grid-template-columns: 130px 1fr; align-items: baseline; gap: 12px; } .kit__type span { color: var(--text-3); font-size: var(--fs-sm); display: grid; } .kit__type code { font-family: var(--font-mono); font-size: 11px; }
+.kit__elev { width: 120px; height: 72px; border-radius: 12px; background: var(--surface-2); display: grid; place-items: center; font-size: 11px; color: var(--text-3); }
+.kit__rad { width: 64px; height: 64px; background: var(--surface-3); display: grid; place-items: center; font-size: 11px; color: var(--text-3); }
+.kit__panel { padding: 12px 4px; color: var(--text-2); }
+.kit__empty { border: 1px dashed var(--border-strong); border-radius: var(--r-md); width: 100%; }

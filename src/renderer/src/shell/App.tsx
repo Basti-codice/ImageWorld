@@ -5,7 +5,11 @@ import { useLibrary } from '@/state/library';
 import { useLang } from '@/i18n';
 import Titlebar from './Titlebar';
 import Sidebar from './Sidebar';
-import { Toasts } from '@/ui';
+import Splash from './Splash';
+import DropOverlay from './DropOverlay';
+import { ErrorBoundary } from './ErrorBoundary';
+import { useGlobalShortcuts } from './shortcuts';
+import { Toasts, TooltipLayer } from '@/ui';
 import MapView from '@/features/map/MapView';
 import PhotosView from '@/features/photos/PhotosView';
 import AlbumsView from '@/features/albums/AlbumsView';
@@ -21,55 +25,61 @@ import Onboarding from '@/features/onboarding/Onboarding';
 import ActiveFilters from '@/features/search/ActiveFilters';
 
 export default function App() {
-  const { view, setCommandPalette, clearSelection } = useUi();
-  const { loaded, sources, settings } = useLibrary();
+  const view = useUi((s) => s.view);
+  const loaded = useLibrary((s) => s.loaded);
+  const sources = useLibrary((s) => s.sources);
+  const settings = useLibrary((s) => s.settings);
   const lang = useLang((s) => s.lang);
+  useGlobalShortcuts();
 
-  // theme + language on <html>
+  // theme (follows the OS when set to "system") + language on <html>
   useEffect(() => {
     const root = document.documentElement;
-    const apply = () => {
-      const dark = settings.theme === 'dark' || (settings.theme === 'system' && matchMedia('(prefers-color-scheme: dark)').matches);
-      root.dataset.theme = dark ? 'dark' : 'light';
-    };
+    const mq = matchMedia('(prefers-color-scheme: dark)');
+    const apply = () => { root.dataset.theme = settings.theme === 'dark' || (settings.theme === 'system' && mq.matches) ? 'dark' : 'light'; };
     apply();
-    const mq = matchMedia('(prefers-color-scheme: dark)'); mq.addEventListener('change', apply);
+    mq.addEventListener('change', apply);
     return () => mq.removeEventListener('change', apply);
   }, [settings.theme]);
   useEffect(() => { document.documentElement.lang = lang; }, [lang]);
 
-  // global shortcuts
-  useEffect(() => {
-    const h = (e: KeyboardEvent) => {
-      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); setCommandPalette(true); }
-      else if (e.key === 'Escape' && !useUi.getState().viewer && !useUi.getState().commandPaletteOpen) clearSelection();
-    };
-    addEventListener('keydown', h); return () => removeEventListener('keydown', h);
-  }, [setCommandPalette, clearSelection]);
+  if (!loaded) return <Splash />;
 
-  if (!loaded) return null;
+  // Onboarding owns the whole window until the first folder was added *and* the user moved on (so the first scan can be watched).
+  const onboarding = sources.length === 0 || !settings.onboardingDone;
   const showTimeline = settings.timelineVisible && (view === 'map' || view === 'photos');
-  const empty = sources.length === 0;
 
   return (
-    <div className="app">
-      <Titlebar />
-      <div className="app__body" data-collapsed={settings.sidebarCollapsed}>
-        <Sidebar />
-        <main className="app__main">
-          {!empty && (view === 'map' || view === 'photos') && <ActiveFilters />}
-          <div className="app__view">
-            {empty ? <Onboarding /> : view === 'map' ? <MapView /> : view === 'photos' ? <PhotosView /> : view === 'albums' ? <AlbumsView /> : view === 'places' ? <PlacesView /> : <InsightsView />}
-            {!empty && <SelectionBar />}
-          </div>
-          {!empty && showTimeline && <TimelineBar />}
-        </main>
+    <div className="app" data-collapsed={!onboarding && settings.sidebarCollapsed} data-onboarding={onboarding}>
+      <Titlebar minimal={onboarding} />
+      <div className="app__body">
+        {onboarding ? (
+          <main className="app__main"><ErrorBoundary><Onboarding /></ErrorBoundary></main>
+        ) : (
+          <>
+            <ErrorBoundary><Sidebar /></ErrorBoundary>
+            <main className="app__main">
+              {(view === 'map' || view === 'photos') && <ErrorBoundary silent><ActiveFilters /></ErrorBoundary>}
+              <div className="app__view">
+                <ErrorBoundary resetKey={view}>
+                  <div key={view} className="view" data-view={view}>
+                    {view === 'map' ? <MapView /> : view === 'photos' ? <PhotosView /> : view === 'albums' ? <AlbumsView /> : view === 'places' ? <PlacesView /> : <InsightsView />}
+                  </div>
+                </ErrorBoundary>
+                <ErrorBoundary silent><SelectionBar /></ErrorBoundary>
+              </div>
+              {showTimeline && <ErrorBoundary silent><TimelineBar /></ErrorBoundary>}
+            </main>
+          </>
+        )}
       </div>
-      <Viewer />
-      <CreateAlbumDialog />
-      <CommandPalette />
-      <SettingsDialog />
+      <ErrorBoundary silent><Viewer /></ErrorBoundary>
+      <ErrorBoundary silent><CreateAlbumDialog /></ErrorBoundary>
+      <ErrorBoundary silent><CommandPalette /></ErrorBoundary>
+      <ErrorBoundary silent><SettingsDialog /></ErrorBoundary>
+      <DropOverlay />
       <Toasts />
+      <TooltipLayer />
     </div>
   );
 }

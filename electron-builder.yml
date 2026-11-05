@@ -1,0 +1,99 @@
+# electron-builder configuration – Windows x64 (NSIS installer + portable zip).
+# Build: `npm run dist`   (Windows or CI)   |   local smoke test: `npm run dist:dir`
+appId: com.imageworld.app
+productName: ImageWorld
+copyright: Copyright © 2026 ImageWorld
+executableName: ImageWorld
+
+directories:
+  output: release
+  buildResources: build
+
+asar: true
+compression: maximum
+# keep only German + English Chromium locale packs (saves ~35 MB)
+electronLanguages:
+  - de
+  - en-US
+
+# ---------------------------------------------------------------------------
+# What goes into app.asar.
+# The renderer (React, MapLibre, d3, world-atlas, fonts, icons …) is fully bundled by Vite into out/renderer, so
+# those npm packages are NOT needed at runtime and are excluded. The main bundle only requires the externals from
+# electron.vite.config.ts (sharp, exiftool-vendored, ffmpeg-static, libheif-js, chokidar, all-the-cities, kdbush,
+# geokdbush) which are resolved from node_modules. `npm run verify:package` checks that nothing required is missing.
+# ---------------------------------------------------------------------------
+files:
+  - out/**
+  - package.json
+  - "!**/*.map"
+  - "!**/*.{md,markdown,ts,mts,cts,tsbuildinfo}"
+  - "!**/{README,CHANGELOG,HISTORY,CONTRIBUTING,SECURITY}*"
+  - "!**/{.github,test,tests,__tests__,example,examples,docs}/**"
+  - "!node_modules/.package-lock.json"
+  # renderer-only packages (bundled into out/renderer by Vite)
+  - "!node_modules/{react,react-dom,scheduler,maplibre-gl,lucide-react,world-atlas,topojson-client,zustand,clsx}/**"
+  - "!node_modules/{@maplibre,@mapbox,@tanstack,@fontsource-variable,@fontsource}/**"
+  - "!node_modules/{d3-array,d3-color,d3-format,d3-geo,d3-interpolate,d3-scale,d3-time,d3-time-format,internmap}/**"
+  - "!node_modules/{gl-matrix,earcut,potpack,quickselect,bidi-js,murmurhash-js,json-stringify-pretty-compact,require-from-string,minimist,commander}/**"
+  # type-only packages
+  - "!node_modules/@types/**"
+  # ffmpeg-static: keep ffmpeg.LICENSE (GPL text must ship with the binary), drop the installer script
+  - "!node_modules/ffmpeg-static/{install.js,example.js}"
+
+# Binaries that are spawned / dlopen()-ed must live outside the asar archive (app.asar.unpacked).
+asarUnpack:
+  - node_modules/sharp/**
+  - node_modules/@img/**
+  - node_modules/exiftool-vendored.exe/**
+  - node_modules/exiftool-vendored.pl/**
+  - node_modules/ffmpeg-static/**
+  - node_modules/libheif-js/**
+
+extraResources:
+  - from: resources/icon.png
+    to: icon.png
+  - from: LICENSE
+    to: LICENSE.txt
+
+win:
+  target:
+    - target: nsis
+      arch: [x64]
+    - target: zip
+      arch: [x64]
+  icon: build/icon.ico
+  artifactName: ImageWorld-Portable-${version}-win-${arch}.${ext}
+  requestedExecutionLevel: asInvoker
+  # Unsigned build. Add certificateFile/certificatePassword (or Azure Trusted Signing) later, see README.
+  # When cross-building on Linux without wine: `-c.win.signAndEditExecutable=false` (the icon is then not embedded in the exe).
+  legalTrademarks: ImageWorld
+
+nsis:
+  oneClick: false
+  perMachine: false # per-user install (no admin rights, %LOCALAPPDATA%\Programs\ImageWorld); the wizard offers "all users"
+  allowElevation: true
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: ImageWorld
+  runAfterFinish: true
+  deleteAppDataOnUninstall: false # photos index, albums, favorites … stay in %APPDATA%\ImageWorld
+  unicode: true
+  warningsAsErrors: false
+  multiLanguageInstaller: true
+  installerLanguages:
+    - de_DE
+    - en_US
+  displayLanguageSelector: false
+  artifactName: ImageWorld-Setup-${version}.exe
+  uninstallDisplayName: ImageWorld
+  installerIcon: build/icon.ico
+  uninstallerIcon: build/icon.ico
+  installerHeaderIcon: build/icon.ico
+  installerSidebar: build/installerSidebar.bmp
+  uninstallerSidebar: build/uninstallerSidebar.bmp
+  installerHeader: build/installerHeader.bmp
+
+# Never publish from `npm run dist`; GitHub Releases are created by the workflow.
+publish: null

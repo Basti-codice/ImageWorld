@@ -1,3 +1,38 @@
 import type { Bundle } from '@/i18n';
 
-export const viewer: Bundle = { de: {}, en: {} };
+export const viewer: Bundle = {
+  de: {
+    'viewer.title': 'Fotobetrachter', 'viewer.close': 'Schließen', 'viewer.prev': 'Zurück', 'viewer.next': 'Weiter',
+    'viewer.favorite': 'Favorit', 'viewer.fav.on': 'Als Favorit markiert', 'viewer.fav.off': 'Favorit entfernt',
+    'viewer.showInFolder': 'Im Ordner anzeigen', 'viewer.openOriginal': 'Original öffnen',
+    'viewer.place.assign': 'Ort zuweisen', 'viewer.place.change': 'Ort ändern', 'viewer.place.remove': 'Ort entfernen',
+    'viewer.zoom': 'Zoom', 'viewer.zoom.in': 'Vergrößern', 'viewer.zoom.out': 'Verkleinern', 'viewer.zoom.fit': 'Einpassen', 'viewer.zoom.100': 'Originalgröße',
+    'viewer.rating': 'Bewertung', 'viewer.rating.n': '{n} Sterne', 'viewer.rating.set': '{n} Sterne', 'viewer.rating.clear': 'Bewertung entfernt',
+    'viewer.tags': 'Tags', 'viewer.tags.add': 'Tag hinzufügen …', 'viewer.tags.remove': 'Tag „{tag}“ entfernen', 'viewer.tags.suggestions': 'Vorhandene Tags',
+    'viewer.info': 'Informationen', 'viewer.info.close': 'Informationen ausblenden',
+    'viewer.info.date': 'Aufnahme', 'viewer.info.time': '{time} Uhr', 'viewer.info.modified': 'Änderungsdatum der Datei',
+    'viewer.info.place': 'Ort', 'viewer.info.noplace': 'Kein Ort zugewiesen', 'viewer.info.geo.exif': 'Aus den Metadaten', 'viewer.info.geo.manual': 'Manuell zugewiesen',
+    'viewer.info.copy': 'Koordinaten kopieren', 'viewer.info.copied': 'Koordinaten kopiert',
+    'viewer.info.camera': 'Kamera', 'viewer.info.aperture': 'Blende', 'viewer.info.shutter': 'Zeit', 'viewer.info.focal': 'Brennweite',
+    'viewer.info.file': 'Datei', 'viewer.info.resolution': 'Auflösung', 'viewer.info.size': 'Größe', 'viewer.info.type': 'Format', 'viewer.info.duration': 'Dauer', 'viewer.info.photo': 'Foto', 'viewer.info.video': 'Video',
+    'viewer.video.play': 'Abspielen', 'viewer.video.pause': 'Pause', 'viewer.video.seek': 'Position', 'viewer.video.mute': 'Stummschalten', 'viewer.video.unmute': 'Ton an', 'viewer.video.fullscreen': 'Vollbild',
+    'viewer.error.image': 'Bild konnte nicht geladen werden', 'viewer.error.video': 'Video kann nicht abgespielt werden', 'viewer.error.missing': 'Datei nicht verfügbar',
+  },
+  en: {
+    'viewer.title': 'Photo viewer', 'viewer.close': 'Close', 'viewer.prev': 'Previous', 'viewer.next': 'Next',
+    'viewer.favorite': 'Favorite', 'viewer.fav.on': 'Marked as favorite', 'viewer.fav.off': 'Favorite removed',
+    'viewer.showInFolder': 'Show in folder', 'viewer.openOriginal': 'Open original',
+    'viewer.place.assign': 'Assign place', 'viewer.place.change': 'Change place', 'viewer.place.remove': 'Remove place',
+    'viewer.zoom': 'Zoom', 'viewer.zoom.in': 'Zoom in', 'viewer.zoom.out': 'Zoom out', 'viewer.zoom.fit': 'Fit to window', 'viewer.zoom.100': 'Actual size',
+    'viewer.rating': 'Rating', 'viewer.rating.n': '{n} stars', 'viewer.rating.set': '{n} stars', 'viewer.rating.clear': 'Rating cleared',
+    'viewer.tags': 'Tags', 'viewer.tags.add': 'Add tag …', 'viewer.tags.remove': 'Remove tag “{tag}”', 'viewer.tags.suggestions': 'Existing tags',
+    'viewer.info': 'Info', 'viewer.info.close': 'Hide info',
+    'viewer.info.date': 'Captured', 'viewer.info.time': '{time}', 'viewer.info.modified': 'File modification date',
+    'viewer.info.place': 'Place', 'viewer.info.noplace': 'No place assigned', 'viewer.info.geo.exif': 'From metadata', 'viewer.info.geo.manual': 'Assigned manually',
+    'viewer.info.copy': 'Copy coordinates', 'viewer.info.copied': 'Coordinates copied',
+    'viewer.info.camera': 'Camera', 'viewer.info.aperture': 'Aperture', 'viewer.info.shutter': 'Shutter', 'viewer.info.focal': 'Focal length',
+    'viewer.info.file': 'File', 'viewer.info.resolution': 'Resolution', 'viewer.info.size': 'Size', 'viewer.info.type': 'Format', 'viewer.info.duration': 'Duration', 'viewer.info.photo': 'Photo', 'viewer.info.video': 'Video',
+    'viewer.video.play': 'Play', 'viewer.video.pause': 'Pause', 'viewer.video.seek': 'Position', 'viewer.video.mute': 'Mute', 'viewer.video.unmute': 'Unmute', 'viewer.video.fullscreen': 'Fullscreen',
+    'viewer.error.image': 'Image could not be loaded', 'viewer.error.video': 'Video cannot be played', 'viewer.error.missing': 'File unavailable',
+  },
+};
