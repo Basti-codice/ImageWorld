@@ -179,7 +179,7 @@ export default function TimelineChart({ ix, trips, bounds, onZoomedChange, fitSi
   const k = W > 0 ? W / spanMs : 0;
   const X = (tm: number) => (tm - view[0]) * k;
   const buckets = useMemo(() => (ix && W > 0 ? buildBuckets(ix, unit, view[0], view[1]) : []), [ix, unit, view, W]);
-  const ticks = useMemo(() => buildTicks(view[0], view[1], W, locale), [view, W, locale]);
+  const ticks = useMemo(() => (ix ? buildTicks(view[0], view[1], W, locale) : []), [ix, view, W, locale]);
   const max = useMemo(() => buckets.reduce((m, b) => Math.max(m, b.count), 0), [buckets]);
   const hoverStart = hover?.kind === 'bar' ? hover.b.start : null;
 
@@ -467,12 +467,13 @@ export default function TimelineChart({ ix, trips, bounds, onZoomedChange, fitSi
       <div className="tl-lane" aria-label={t('timeline.trips')}>
         {laneTrips.map(({ trip, l, w }) => {
           const active = sameRange(range, tripRange(trip));
-          const label = w >= 110 ? `${trip.title} · ${new Intl.DateTimeFormat(locale, { timeZone: 'UTC', month: 'short', year: 'numeric' }).format(trip.from)}` : w >= 44 ? trip.title : '';
+          const label = w >= 150 ? `${trip.title} · ${new Intl.DateTimeFormat(locale, { timeZone: 'UTC', month: 'short', year: 'numeric' }).format(trip.from)}` : w >= 44 ? trip.title : '';
           return (
             <button
               key={trip.id}
               className="tl-trip"
               data-away={trip.away || undefined}
+              data-thin={w < 8 || undefined}
               aria-pressed={active}
               aria-label={`${trip.title}, ${formatRange(trip.from, trip.to, locale)}`}
               style={{ left: l, width: w }}

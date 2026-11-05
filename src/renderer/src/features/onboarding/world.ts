@@ -31,10 +31,15 @@ function land(): Poly[] {
   for (const g of geoms) {
     const list = g.type === 'Polygon' ? [g.coordinates] : g.coordinates;
     for (const rings of list) {
-      const outer = rings[0] as Ring;
-      let minX = 180, maxX = -180, minY = 90, maxY = -90;
-      for (const [x, y] of outer) { if (x < minX) minX = x; if (x > maxX) maxX = x; if (y < minY) minY = y; if (y > maxY) maxY = y; }
-      out.push({ rings: rings as Ring[], minX, maxX, minY, maxY });
+      // unwrap longitudes so rings that cross the antimeridian stay continuous (otherwise PIP paints a band across the oceans)
+      const unwrapped = (rings as Ring[]).map((ring) => {
+        const u: Ring = []; let prev = ring[0][0], off = 0;
+        for (const [x, y] of ring) { if (x - prev > 180) off -= 360; else if (prev - x > 180) off += 360; prev = x; u.push([x + off, y]); }
+        return u;
+      });
+      let minX = Infinity, maxX = -Infinity, minY = 90, maxY = -90;
+      for (const [x, y] of unwrapped[0]) { if (x < minX) minX = x; if (x > maxX) maxX = x; if (y < minY) minY = y; if (y > maxY) maxY = y; }
+      out.push({ rings: unwrapped, minX, maxX, minY, maxY });
     }
   }
   return (polys = out);
@@ -50,10 +55,14 @@ function inRing(x: number, y: number, ring: Ring) {
 }
 function onLand(lon: number, lat: number) {
   for (const p of land()) {
-    if (lon < p.minX || lon > p.maxX || lat < p.minY || lat > p.maxY) continue;
-    let inside = false;
-    for (const r of p.rings) if (inRing(lon, lat, r)) inside = !inside;
-    if (inside) return true;
+    if (lat < p.minY || lat > p.maxY) continue;
+    for (const shift of [0, -360, 360]) {
+      const x = lon + shift;
+      if (x < p.minX || x > p.maxX) continue;
+      let inside = false;
+      for (const r of p.rings) if (inRing(x, lat, r)) inside = !inside;
+      if (inside) return true;
+    }
   }
   return false;
 }

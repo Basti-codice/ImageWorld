@@ -63,6 +63,59 @@ function stripSeams(lines: Position[][]): Position[][] {
   return out;
 }
 
+// ---- antimeridian repair: world-atlas rings that cross ±180° contain edges spanning the whole map in planar coordinates.
+type Ring = Position[];
+
+/** Sutherland–Hodgman clip of a ring against x >= x0 && x <= x1 */
+function clipStrip(ring: Ring, x0: number, x1: number): Ring {
+  const half = (pts: Ring, keep: (x: number) => boolean, at: number): Ring => {
+    const out: Ring = [];
+    for (let i = 0; i < pts.length; i++) {
+      const a = pts[i], b = pts[(i + 1) % pts.length];
+      const ia = keep(a[0]), ib = keep(b[0]);
+      if (ia) out.push(a);
+      if (ia !== ib) { const f = (at - a[0]) / (b[0] - a[0]); out.push([at, a[1] + (b[1] - a[1]) * f]); }
+    }
+    return out;
+  };
+  return half(half(ring, (x) => x >= x0, x0), (x) => x <= x1, x1);
+}
+
+function fixPolygon(rings: Ring[]): Ring[][] {
+  const pole = (r: Ring) => r.every((p) => Math.abs(p[1]) > 89.9);
+  const real = rings.filter((r) => !pole(r));
+  const jumps = (r: Ring) => r.some((p, i) => i > 0 && Math.abs(p[0] - r[i - 1][0]) > 180);
+  if (!real.some(jumps)) return [real];
+  const polys: Ring[][] = [];
+  for (const r of real) {
+    if (!jumps(r)) { polys.push([r]); continue; }
+    const u: Ring = [];
+    let off = 0;
+    r.forEach((p, i) => { if (i > 0) { const d = p[0] + off - u[i - 1][0]; if (d > 180) off -= 360; else if (d < -180) off += 360; } u.push([p[0] + off, p[1]]); });
+    const a = u[0], b = u[u.length - 1];
+    let ring = u;
+    if (Math.abs(b[0] - a[0]) > 180) { // encircles a pole (Antarctica): close the outline along the pole
+      const lat = u.reduce((m, p) => m + p[1], 0) / u.length < 0 ? -90 : 90;
+      ring = [...u.slice(0, -1), [b[0], lat], [a[0], lat]];
+    }
+    const xs = ring.map((p) => p[0]);
+    const lo = Math.min(...xs), hi = Math.max(...xs);
+    for (let k = Math.floor((lo + 180) / 360); k <= Math.floor((hi + 180) / 360); k++) {
+      const part = clipStrip(ring.map((p) => [p[0] - 360 * k, p[1]]), -180, 180);
+      if (part.length >= 3) { part.push(part[0]); polys.push([part]); }
+    }
+  }
+  return polys;
+}
+
+function fixFeatureGeometry(g: Geometry): Geometry {
+  if (g.type !== 'Polygon' && g.type !== 'MultiPolygon') return g;
+  const src = g.type === 'Polygon' ? [(g as Polygon).coordinates] : (g as MultiPolygon).coordinates;
+  const out: Position[][][] = [];
+  for (const poly of src) out.push(...fixPolygon(poly));
+  return { type: 'MultiPolygon', coordinates: out };
+}
+
 function toLines(g: Geometry | null): Position[][] {
   if (!g) return [];
   if (g.type === 'LineString') return [(g as LineString).coordinates];
@@ -79,8 +132,10 @@ function lineFC(lines: Position[][]): FeatureCollection {
 function buildGeo(detail: MapDetail): Geo {
   const topo = (detail === 'high' ? atlas50 : atlas110) as unknown as Topology<{ countries: GeometryCollection; land: GeometryCollection }>;
   const landF = feature(topo, topo.objects.land) as unknown as Feature | FeatureCollection;
-  const land: FeatureCollection = landF.type === 'FeatureCollection' ? landF : { type: 'FeatureCollection', features: [landF] };
-  const cf = feature(topo, topo.objects.countries) as unknown as FeatureCollection;
+  const land0: FeatureCollection = landF.type === 'FeatureCollection' ? landF : { type: 'FeatureCollection', features: [landF] };
+  const land: FeatureCollection = { type: 'FeatureCollection', features: land0.features.map((f) => ({ ...f, geometry: fixFeatureGeometry(f.geometry) })) };
+  const cf0 = feature(topo, topo.objects.countries) as unknown as FeatureCollection;
+  const cf: FeatureCollection = { type: 'FeatureCollection', features: cf0.features.map((f) => ({ ...f, geometry: fixFeatureGeometry(f.geometry) })) };
   // per-country tonal variation `v` in 0..1 (deterministic) – keeps neighbouring countries apart without borders shouting
   const countries: FeatureCollection = { type: 'FeatureCollection', features: cf.features.map((f) => ({ ...f, properties: { v: hash01(String(f.id ?? f.properties?.name ?? '')) } })) };
   const borders = lineFC(toLines(mesh(topo, topo.objects.countries, (a, b) => a !== b) as unknown as Geometry));

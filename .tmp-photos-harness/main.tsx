@@ -37,5 +37,6 @@ function Harness() {
     </div>
   );
 }
+addEventListener('keydown', (e) => { if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); useUi.getState().setCommandPalette(true); } else if (e.key === 'Escape' && !useUi.getState().commandPaletteOpen) useUi.getState().clearSelection(); });
 createRoot(document.getElementById('root')!).render(<Harness />);
 useLibrary.getState().init();

@@ -25,7 +25,7 @@ export const albums: Bundle = {
     'albums.slideshow.slow': 'Langsam', 'albums.slideshow.normal': 'Normal', 'albums.slideshow.fast': 'Schnell',
     'albums.create.title': 'Album erstellen', 'albums.create.fromSelection': 'Aus Auswahl', 'albums.create.fromArea': 'Aus Kartenbereich', 'albums.create.empty': 'Leeres Album',
     'albums.create.emptyHint': 'Fotos lassen sich anschließend in der Mediathek auswählen und hinzufügen.', 'albums.create.areaEmpty': 'Im gewählten Bereich liegen keine Fotos.',
-    'albums.sel.place': 'Ort zuweisen', 'albums.sel.tags': 'Tags', 'albums.sel.tags.title': 'Tags für {n} Auswahl', 'albums.sel.removeFromAlbum': 'Aus Album entfernen',
+    'albums.sel.place': 'Ort zuweisen', 'albums.sel.tags': 'Tags', 'albums.sel.tags.title': 'Tags für Auswahl ({n})', 'albums.sel.removeFromAlbum': 'Aus Album entfernen',
   },
   en: {
     'albums.new': 'New album', 'albums.mine': 'All albums', 'albums.album': 'Album', 'albums.open': 'Open',
@@ -51,6 +51,6 @@ export const albums: Bundle = {
     'albums.slideshow.slow': 'Slow', 'albums.slideshow.normal': 'Normal', 'albums.slideshow.fast': 'Fast',
     'albums.create.title': 'Create album', 'albums.create.fromSelection': 'From selection', 'albums.create.fromArea': 'From map area', 'albums.create.empty': 'Empty album',
     'albums.create.emptyHint': 'You can select photos in the library afterwards and add them here.', 'albums.create.areaEmpty': 'There are no photos in the selected area.',
-    'albums.sel.place': 'Assign place', 'albums.sel.tags': 'Tags', 'albums.sel.tags.title': 'Tags for {n} selected', 'albums.sel.removeFromAlbum': 'Remove from album',
+    'albums.sel.place': 'Assign place', 'albums.sel.tags': 'Tags', 'albums.sel.tags.title': 'Tags for selection ({n})', 'albums.sel.removeFromAlbum': 'Remove from album',
   },
 };

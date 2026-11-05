@@ -25,7 +25,7 @@ export default function EditAlbumDialog({ album, focus = 'name', onClose }: { al
   const coverRef = useRef<HTMLDivElement>(null);
   const colorRef = useRef<HTMLDivElement>(null);
   const nameRef = useRef<HTMLInputElement>(null);
-  const candidates = useMemo(() => photos.filter((p) => p.kind === 'photo').slice(0, 240), [photos]);
+  const candidates = useMemo(() => photos.slice(0, 240), [photos]);
 
   useEffect(() => {
     if (focus === 'name') nameRef.current?.select();

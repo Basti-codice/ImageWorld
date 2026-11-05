@@ -128,7 +128,7 @@ export default function Slideshow({ photos, start = 0, title, onClose }: { photo
         {layers.map((l) => {
           const p = photos[l.i]; if (!p) return null;
           return (
-            <div key={l.k} className="ss__layer" style={{ background: p.color }}>
+            <div key={l.k} className="ss__layer" style={p.color ? { background: `color-mix(in srgb, ${p.color} 42%, #000)` } : undefined}>
               <img className="ss__img" data-fit={l.fit} src={thumbUrl(p, 1600)} alt="" draggable={false} style={l.kb} />
             </div>
           );

@@ -1,6 +1,6 @@
 .onb { position: relative; height: 100%; overflow: hidden; display: flex; align-items: center; background: var(--bg); }
-.onb__world { position: absolute; right: -4%; top: 50%; width: min(1180px, 96vw); height: auto; transform: translateY(-50%); -webkit-mask-image: linear-gradient(90deg, transparent 8%, #000 52%); mask-image: linear-gradient(90deg, transparent 8%, #000 52%); pointer-events: none; }
-.onb__land { fill: none; stroke: var(--text-3); stroke-width: 3.1; stroke-linecap: round; opacity: .34; }
+.onb__world { position: absolute; right: 2%; top: 52%; width: min(980px, 74vw); height: auto; transform: translateY(-50%); -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 36%); mask-image: linear-gradient(90deg, transparent 0%, #000 36%); pointer-events: none; }
+.onb__land { fill: none; stroke: var(--text-3); stroke-width: 3.1; stroke-linecap: round; opacity: .46; }
 :root[data-theme='light'] .onb__land { opacity: .42; }
 .onb__loc { fill: var(--accent); animation: iw-dot-in 700ms var(--ease) both; transform-box: fill-box; transform-origin: center; }
 @keyframes iw-dot-in { from { opacity: 0; transform: scale(.2); } to { opacity: .95; transform: scale(1); } }

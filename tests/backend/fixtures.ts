@@ -13,10 +13,8 @@ export interface Fixtures {
   cleanup: () => Promise<void>;
 }
 
-const gps = (lat: number, lon: number) => ({
-  GPSLatitude: Math.abs(lat), GPSLatitudeRef: lat >= 0 ? 'N' : 'S',
-  GPSLongitude: Math.abs(lon), GPSLongitudeRef: lon >= 0 ? 'E' : 'W',
-});
+// exiftool derives the N/S/E/W refs from the sign of the value
+const gps = (lat: number, lon: number) => ({ GPSLatitude: lat, GPSLongitude: lon });
 
 export function tempDir(prefix = 'iw-test-'): string {
   return mkdtempSync(join(tmpdir(), prefix));
@@ -57,7 +55,7 @@ export async function buildFixtures(): Promise<Fixtures> {
   await solid(d('trip', 'IMG_20190704_101500.jpg'), 200, 200, '#888888');
   // null island + garbage
   await solid(d('trip', 'nullisland.jpg'), 200, 100, '#222222');
-  await et.write(d('trip', 'nullisland.jpg'), { DateTimeOriginal: '2020:01:01 00:00:00', GPSLatitude: 0, GPSLongitude: 0, GPSLatitudeRef: 'N', GPSLongitudeRef: 'E' }, ['-overwrite_original']);
+  await et.write(d('trip', 'nullisland.jpg'), { DateTimeOriginal: '2020:01:01 00:00:00', GPSLatitude: 0, GPSLongitude: 0 }, ['-overwrite_original']);
 
   // other raster formats
   await solid(d('trip', 'sub', 'tokyo.png'), 200, 150, '#33aa33', 'png');

@@ -74,6 +74,7 @@ export default function MapView() {
       return;
     }
     ctrl.current = c;
+    if (import.meta.env.DEV) (window as unknown as Record<string, unknown>).__mapCtrl = c;
     const m = c.map;
     m.getCanvas().addEventListener('webglcontextcreationfailed', () => setFailed(true));
     return () => { c.destroy(); ctrl.current = null; };

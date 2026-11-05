@@ -39,7 +39,12 @@ export default function AlbumCard({ album, onOpen, menuItems }: Props) {
       </div>
       <div className="alb-card__meta truncate">{albumMeta(photos)}</div>
       {place && <div className="alb-card__place truncate">{place}</div>}
-      {menu && <Menu x={menu.x} y={menu.y} items={menuItems(album)} onClose={() => setMenu(null)} />}
+      {menu && (
+        // the menu is portaled but React events still bubble to the card: keep them from opening the album
+        <div style={{ display: 'contents' }} onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()} onContextMenu={(e) => e.stopPropagation()}>
+          <Menu x={menu.x} y={menu.y} items={menuItems(album)} onClose={() => setMenu(null)} />
+        </div>
+      )}
     </div>
   );
 }

@@ -421,10 +421,10 @@ export class ThumbService {
     try {
       const buf = await renderThumb(photo.path, photo.ext, job.size, this.deps);
       await this.cache.write(photo.id, job.size, buf);
-      job.resolve(buf);
       if (!photo.color) {
         try { this.o.onColor?.(photo.id, await averageColor(buf)); } catch { /* ignore */ }
       }
+      job.resolve(buf);
     } catch (e) {
       this.failed.set(job.key, photo.mtime);
       if (this.failed.size > 50_000) this.failed.clear();

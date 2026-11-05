@@ -84,19 +84,19 @@ function Bar({ leaving, count }: { leaving: boolean; count: number }) {
         <span className="tabular">{tn('sel.count', count)}</span>
       </div>
       <i className="selbar__sep" />
-      <Button variant="primary" size="sm" icon={<FolderHeart size={15} />} onClick={() => ui().setCreateAlbumOpen(true)}><span className="selbar__lbl">{t('sel.createAlbum')}</span></Button>
+      <Button title={t('sel.createAlbum')} variant="primary" size="sm" icon={<FolderHeart size={15} />} onClick={() => ui().setCreateAlbumOpen(true)}><span className="selbar__lbl">{t('sel.createAlbum')}</span></Button>
 
       <div className="selbar__anchor">
-        <Button variant="ghost" size="sm" aria-expanded={pop === 'album'} icon={<FolderPlus size={15} />} onClick={() => toggle('album')}><span className="selbar__lbl">{t('sel.addToAlbum')}</span></Button>
+        <Button title={t('sel.addToAlbum')} variant="ghost" size="sm" aria-expanded={pop === 'album'} icon={<FolderPlus size={15} />} onClick={() => toggle('album')}><span className="selbar__lbl">{t('sel.addToAlbum')}</span></Button>
         {pop === 'album' && <AlbumPicker className="selbar__pop" ids={ids} onDone={() => setPop(null)} onNew={() => ui().setCreateAlbumOpen(true)} />}
       </div>
 
       <Button variant="ghost" size="sm" aria-pressed={allFav} className={clsx(allFav && 'is-fav')} icon={<Heart size={15} fill={allFav ? 'currentColor' : 'none'} />}
         onClick={() => void lib().updatePhotos(ids, { favorite: !allFav })}><span className="selbar__lbl">{t('sel.favorite')}</span></Button>
-      <Button variant="ghost" size="sm" icon={<MapPin size={15} />} onClick={() => ui().setPlacing(ids)}><span className="selbar__lbl">{t('albums.sel.place')}</span></Button>
+      <Button title={t('albums.sel.place')} variant="ghost" size="sm" icon={<MapPin size={15} />} onClick={() => ui().setPlacing(ids)}><span className="selbar__lbl">{t('albums.sel.place')}</span></Button>
 
       <div className="selbar__anchor">
-        <Button variant="ghost" size="sm" aria-expanded={pop === 'tags'} icon={<Tag size={15} />} onClick={() => toggle('tags')}><span className="selbar__lbl">{t('albums.sel.tags')}</span></Button>
+        <Button title={t('albums.sel.tags')} variant="ghost" size="sm" aria-expanded={pop === 'tags'} icon={<Tag size={15} />} onClick={() => toggle('tags')}><span className="selbar__lbl">{t('albums.sel.tags')}</span></Button>
         {pop === 'tags' && (
           <div className="selbar__pop selbar__tags">
             <div className="selbar__poptitle">{t('albums.sel.tags.title', { n: count })}</div>
@@ -108,7 +108,7 @@ function Bar({ leaving, count }: { leaving: boolean; count: number }) {
       {canRemove && album && (
         <>
           <i className="selbar__sep" />
-          <Button variant="ghost" size="sm" icon={<FolderMinus size={15} />} onClick={() => { void removeFromAlbum(album, ids.filter((id) => album.photoIds.includes(id))); ui().clearSelection(); }}><span className="selbar__lbl">{t('albums.sel.removeFromAlbum')}</span></Button>
+          <Button title={t('albums.sel.removeFromAlbum')} variant="ghost" size="sm" icon={<FolderMinus size={15} />} onClick={() => { void removeFromAlbum(album, ids.filter((id) => album.photoIds.includes(id))); ui().clearSelection(); }}><span className="selbar__lbl">{t('albums.sel.removeFromAlbum')}</span></Button>
         </>
       )}
     </div>

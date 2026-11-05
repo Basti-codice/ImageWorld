@@ -321,7 +321,7 @@ export class MapController {
       const dx = (b.getEast() - b.getWest()) * 0.12, dy = (b.getNorth() - b.getSouth()) * 0.12;
       bounds = [b.getWest() - dx, b.getSouth() - dy, b.getEast() + dx, b.getNorth() + dy];
     }
-    let clusters = clusterize(ix, { zoom: Z, cellPx: 72, minDistPx: 50, bounds, start });
+    let clusters = clusterize(ix, { zoom: Z, cellPx: 72, minDistPx: this.thumbMarkers ? 60 : 36, bounds, start });
     if (this.projection === 'globe' && z < 6) {
       const c = m.getCenter();
       clusters = clusters.filter((k) => angularDistance(c.lng, c.lat, k.lon, k.lat) < 78);
@@ -348,8 +348,7 @@ export class MapController {
     const cur = this.pb.cursor;
     const start = cur == null ? 0 : this.ix.firstAtOrBefore(cur);
     let w = b.getWest(), e = b.getEast();
-    if (e - w >= 360) { w = -180; e = 180; }
-    w = ((w + 540) % 360) - 180; e = ((e + 540) % 360) - 180;
+    if (e - w >= 360) { w = -180; e = 180; } else { w = ((w + 540) % 360) - 180; e = ((e + 540) % 360) - 180; }
     let inView: number[];
     if (w <= e) inView = this.ix.inBox(w, b.getSouth(), e, b.getNorth(), start);
     else inView = [...this.ix.inBox(w, b.getSouth(), 180, b.getNorth(), start), ...this.ix.inBox(-180, b.getSouth(), e, b.getNorth(), start)].sort((a, c) => a - c);
@@ -398,7 +397,7 @@ export class MapController {
 
   private overviewZoom(w: number, h: number): number {
     return this.projection === 'globe'
-      ? Math.log2((0.8 * Math.min(h, w * 0.9) * Math.PI) / 512)
+      ? Math.log2((0.78 * Math.min(h, w * 0.9) * Math.PI) / (512 * 1.38))
       : Math.log2(Math.max(w, h * 2) / 512);
   }
 
@@ -429,7 +428,7 @@ export class MapController {
     const span = Math.max(e - w, (n - s) * 1.4);
     if (span > 95) {
       const lon = (Math.atan2(sy, sx) * 180) / Math.PI, lat = (Math.atan2(sz, Math.hypot(sx, sy)) * 180) / Math.PI;
-      run([lon, Math.max(-50, Math.min(60, lat))], this.overviewZoom(box.width, box.height));
+      run([lon, Math.max(-25, Math.min(40, lat * 0.7))], this.overviewZoom(box.width, box.height));
       return;
     }
     const cam = m.cameraForBounds([[w, s], [e, n]], { padding: PAD, maxZoom: 14 });

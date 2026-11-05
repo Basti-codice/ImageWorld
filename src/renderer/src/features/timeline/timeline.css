@@ -61,6 +61,9 @@
 .tl-trip[data-away] { background: var(--accent-soft); color: var(--accent-text); }
 .tl-trip[data-away]:hover { background: color-mix(in srgb, var(--accent) 28%, transparent); }
 .tl-trip[aria-pressed='true'] { background: var(--accent); color: var(--text-on-accent); }
+.tl-trip[data-thin] { background: color-mix(in srgb, var(--text-3) 45%, transparent); }
+.tl-trip[data-thin][data-away] { background: color-mix(in srgb, var(--accent) 62%, transparent); }
+.tl-trip[data-thin]:hover { background: var(--accent); }
 .tl-trip:focus-visible { outline-offset: 0; }
 
 @container tl (max-width: 1080px) { .tl-presets .chip:nth-child(n+4) { display: none; } }
