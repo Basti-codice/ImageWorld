@@ -1,0 +1,84 @@
+/* ImageWorld design tokens. Never hard-code colours/sizes in components – use these. */
+:root {
+  --font-sans: 'Inter Variable', 'Segoe UI Variable Text', 'Segoe UI', system-ui, sans-serif;
+  --font-mono: 'Cascadia Mono', ui-monospace, Consolas, monospace;
+
+  /* radii */
+  --r-xs: 6px; --r-sm: 8px; --r-md: 12px; --r-lg: 16px; --r-xl: 22px; --r-pill: 999px;
+
+  /* spacing scale (use calc(var(--s) * n)) */
+  --s: 4px;
+
+  /* layout */
+  --titlebar-h: 44px;
+  --sidebar-w: 236px;
+  --sidebar-w-collapsed: 64px;
+  --timeline-h: 148px;
+
+  /* motion */
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast: 120ms; --dur: 200ms; --dur-slow: 360ms;
+
+  /* z-index */
+  --z-map-ui: 10; --z-bar: 20; --z-menu: 60; --z-overlay: 80; --z-viewer: 90; --z-dialog: 100; --z-toast: 120;
+}
+
+:root, :root[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: #0b0d12;           /* window */
+  --bg-sunken: #080a0e;
+  --surface-1: #11141b;    /* sidebar, panels */
+  --surface-2: #171b24;    /* cards, inputs */
+  --surface-3: #1e2330;    /* hover */
+  --surface-4: #272d3c;    /* pressed / selected neutral */
+  --overlay: rgba(11, 13, 18, 0.72);
+  --glass: rgba(17, 20, 27, 0.78);
+  --border: rgba(255, 255, 255, 0.07);
+  --border-strong: rgba(255, 255, 255, 0.13);
+  --text: #eceff5;
+  --text-2: #a4acbb;
+  --text-3: #6f7788;
+  --text-on-accent: #ffffff;
+  --accent: #4b94ff;
+  --accent-hover: #6aa6ff;
+  --accent-press: #3680ee;
+  --accent-soft: rgba(75, 148, 255, 0.16);
+  --accent-ring: rgba(75, 148, 255, 0.5);
+  --success: #3ccf8e; --warning: #f2b441; --danger: #ff5d6c;
+  --fav: #ff5d7a;
+  --shadow-1: 0 1px 2px rgba(0,0,0,.4), 0 0 0 1px var(--border);
+  --shadow-2: 0 8px 24px rgba(0,0,0,.45), 0 0 0 1px var(--border);
+  --shadow-3: 0 24px 64px rgba(0,0,0,.6), 0 0 0 1px var(--border-strong);
+  /* data-viz: heat ramp + selection */
+  --heat-1: #2b5cff; --heat-2: #19c3d6; --heat-3: #7ee06b; --heat-4: #ffd23f; --heat-5: #ff6a3d;
+  --select: #ffb938;
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
+  --bg: #f4f5f8;
+  --bg-sunken: #eceef3;
+  --surface-1: #ffffff;
+  --surface-2: #f6f7fa;
+  --surface-3: #eceef4;
+  --surface-4: #e0e3ec;
+  --overlay: rgba(244, 245, 248, 0.78);
+  --glass: rgba(255, 255, 255, 0.82);
+  --border: rgba(15, 20, 35, 0.09);
+  --border-strong: rgba(15, 20, 35, 0.16);
+  --text: #14171f;
+  --text-2: #50586a;
+  --text-3: #8a91a1;
+  --accent: #1f6fe5;
+  --accent-hover: #3a82ee;
+  --accent-press: #1a5fc6;
+  --accent-soft: rgba(31, 111, 229, 0.12);
+  --accent-ring: rgba(31, 111, 229, 0.45);
+  --success: #17a46a; --warning: #c98a10; --danger: #e0364a;
+  --fav: #e6385c;
+  --shadow-1: 0 1px 2px rgba(20,25,40,.08), 0 0 0 1px var(--border);
+  --shadow-2: 0 8px 24px rgba(20,25,40,.14), 0 0 0 1px var(--border);
+  --shadow-3: 0 24px 64px rgba(20,25,40,.22), 0 0 0 1px var(--border-strong);
+  --select: #e08a00;
+}

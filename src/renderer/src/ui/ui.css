@@ -1,0 +1,62 @@
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 34px; padding: 0 14px; border-radius: var(--r-sm); font-weight: 550; background: var(--surface-3); color: var(--text); transition: background var(--dur-fast) var(--ease), transform var(--dur-fast) var(--ease); white-space: nowrap; }
+.btn:hover { background: var(--surface-4); }
+.btn:active { transform: translateY(0.5px); }
+.btn[disabled] { opacity: .45; pointer-events: none; }
+.btn--primary { background: var(--accent); color: var(--text-on-accent); }
+.btn--primary:hover { background: var(--accent-hover); }
+.btn--ghost { background: transparent; color: var(--text-2); }
+.btn--ghost:hover { background: var(--surface-3); color: var(--text); }
+.btn--danger { background: color-mix(in srgb, var(--danger) 18%, transparent); color: var(--danger); }
+.btn--sm { height: 28px; padding: 0 10px; font-size: 12px; }
+.btn--lg { height: 40px; padding: 0 20px; font-size: 14px; border-radius: var(--r-md); }
+
+.ibtn { display: inline-grid; place-items: center; width: 32px; height: 32px; border-radius: var(--r-sm); color: var(--text-2); transition: background var(--dur-fast), color var(--dur-fast); position: relative; }
+.ibtn:hover { background: var(--surface-3); color: var(--text); }
+.ibtn[aria-pressed='true'], .ibtn--active { background: var(--accent-soft); color: var(--accent); }
+.ibtn--sm { width: 26px; height: 26px; border-radius: var(--r-xs); }
+.ibtn--lg { width: 40px; height: 40px; border-radius: var(--r-md); }
+.ibtn--glass { background: var(--glass); backdrop-filter: blur(14px); box-shadow: var(--shadow-1); color: var(--text); }
+.ibtn--glass:hover { background: var(--surface-3); }
+
+.kbd { display: inline-grid; place-items: center; min-width: 20px; height: 20px; padding: 0 6px; border-radius: 5px; background: var(--surface-3); border: 1px solid var(--border); color: var(--text-3); font-size: 11px; font-weight: 550; }
+
+.chip { display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 11px; border-radius: var(--r-pill); background: var(--surface-2); border: 1px solid var(--border); color: var(--text-2); font-size: 12px; font-weight: 550; transition: all var(--dur-fast); }
+.chip:hover { background: var(--surface-3); color: var(--text); }
+.chip[aria-pressed='true'] { background: var(--accent-soft); border-color: transparent; color: var(--accent); }
+
+.glass { background: var(--glass); backdrop-filter: blur(18px) saturate(1.2); box-shadow: var(--shadow-2); }
+
+.seg { display: inline-flex; padding: 3px; gap: 2px; background: var(--surface-2); border-radius: var(--r-sm); border: 1px solid var(--border); }
+.seg > button { height: 26px; padding: 0 12px; border-radius: 6px; color: var(--text-2); font-weight: 550; font-size: 12px; display: inline-flex; align-items: center; gap: 6px; }
+.seg > button[aria-pressed='true'] { background: var(--surface-4); color: var(--text); box-shadow: 0 1px 2px rgba(0,0,0,.25); }
+
+.switch { width: 38px; height: 22px; border-radius: 11px; background: var(--surface-4); position: relative; transition: background var(--dur); flex: none; }
+.switch::after { content: ''; position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; border-radius: 50%; background: #fff; transition: transform var(--dur) var(--ease); box-shadow: 0 1px 3px rgba(0,0,0,.4); }
+.switch[aria-checked='true'] { background: var(--accent); }
+.switch[aria-checked='true']::after { transform: translateX(16px); }
+
+.field { height: 34px; border-radius: var(--r-sm); border: 1px solid var(--border); background: var(--surface-2); padding: 0 12px; outline: none; width: 100%; user-select: text; transition: border-color var(--dur-fast), box-shadow var(--dur-fast); }
+.field:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+textarea.field { height: auto; padding: 8px 12px; resize: vertical; }
+
+.dialog-backdrop { position: fixed; inset: 0; z-index: var(--z-dialog); background: rgba(5, 7, 10, .6); backdrop-filter: blur(6px); display: grid; place-items: center; animation: iw-fade-in var(--dur) var(--ease); }
+.dialog { width: min(480px, calc(100vw - 48px)); max-height: calc(100vh - 80px); display: flex; flex-direction: column; background: var(--surface-1); border-radius: var(--r-xl); box-shadow: var(--shadow-3); animation: iw-pop-in var(--dur) var(--ease); overflow: hidden; }
+.dialog--wide { width: min(860px, calc(100vw - 48px)); }
+.dialog__head { padding: 22px 24px 8px; font-size: 17px; font-weight: 650; }
+.dialog__body { padding: 8px 24px 20px; overflow: auto; color: var(--text-2); }
+.dialog__foot { padding: 14px 24px; display: flex; justify-content: flex-end; gap: 8px; border-top: 1px solid var(--border); background: var(--surface-1); }
+
+.toasts { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: var(--z-toast); display: flex; flex-direction: column; gap: 8px; align-items: center; pointer-events: none; }
+.toast { pointer-events: auto; display: flex; align-items: center; gap: 14px; padding: 10px 14px 10px 16px; border-radius: var(--r-md); background: var(--surface-4); color: var(--text); box-shadow: var(--shadow-3); animation: iw-pop-in var(--dur) var(--ease); font-weight: 500; }
+.toast--success { border-left: 3px solid var(--success); } .toast--danger { border-left: 3px solid var(--danger); }
+.toast button { color: var(--accent); font-weight: 600; }
+
+.menu { position: fixed; z-index: var(--z-menu); min-width: 200px; padding: 6px; border-radius: var(--r-md); background: var(--surface-2); box-shadow: var(--shadow-3); animation: iw-pop-in var(--dur-fast) var(--ease); }
+.menu__item { display: flex; align-items: center; gap: 10px; width: 100%; height: 32px; padding: 0 10px; border-radius: var(--r-xs); text-align: left; color: var(--text); }
+.menu__item:hover { background: var(--surface-4); }
+.menu__item--danger { color: var(--danger); }
+.menu__sep { height: 1px; margin: 6px 4px; background: var(--border); }
+
+.skeleton { background: linear-gradient(90deg, var(--surface-2) 25%, var(--surface-3) 50%, var(--surface-2) 75%); background-size: 200% 100%; animation: iw-shimmer 1.6s linear infinite; }
+.empty { display: grid; place-items: center; text-align: center; gap: 8px; color: var(--text-3); padding: 48px; }
+.empty h3 { color: var(--text); font-size: 16px; }
