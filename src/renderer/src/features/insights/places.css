@@ -56,8 +56,8 @@
 .pcard__cover img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform var(--dur-slow) var(--ease); }
 .pcard__main:hover .pcard__cover img, .pcard__main:focus-visible .pcard__cover img { transform: scale(1.035); }
 .pcard__main:focus-visible { outline-offset: 3px; }
-.chip { position: absolute; left: 10px; top: 10px; height: 20px; padding: 0 7px; display: inline-flex; align-items: center; border-radius: var(--r-xs); font-size: 11px; font-weight: 650; letter-spacing: .04em; color: var(--text); background: var(--glass); backdrop-filter: blur(12px); box-shadow: var(--shadow-1); }
-.chip--flat { position: static; background: var(--surface-3); box-shadow: none; backdrop-filter: none; color: var(--text-2); height: 22px; }
+.pcc { position: absolute; left: 10px; top: 10px; height: 20px; padding: 0 7px; display: inline-flex; align-items: center; border-radius: var(--r-xs); font-size: 11px; font-weight: 650; letter-spacing: .04em; color: var(--text); background: var(--glass); backdrop-filter: blur(12px); box-shadow: var(--shadow-1); }
+.pcc--flat { position: static; background: var(--surface-3); box-shadow: none; backdrop-filter: none; color: var(--text-2); height: 22px; }
 .pcard__txt { display: flex; flex-direction: column; gap: 1px; padding: 0 2px; min-width: 0; }
 .pcard__txt b { font-weight: 620; font-size: 14px; }
 .pcard__meta { color: var(--text-3); font-size: 12px; display: flex; gap: 6px; }

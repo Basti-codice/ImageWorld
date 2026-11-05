@@ -74,7 +74,6 @@ export default function MapView() {
       return;
     }
     ctrl.current = c;
-    if (import.meta.env.DEV) (window as unknown as Record<string, unknown>).__mapCtrl = c;
     const m = c.map;
     m.getCanvas().addEventListener('webglcontextcreationfailed', () => setFailed(true));
     return () => { c.destroy(); ctrl.current = null; };
@@ -193,13 +192,15 @@ export default function MapView() {
       </div>
 
       {geo.length === 0 && (
-        <div className="mp-empty glass">
-          <MapPinOff size={26} strokeWidth={1.5} />
-          <h3>{libraryHasGeo ? t('map.noMatch.title') : t('map.empty.title')}</h3>
-          <p>{libraryHasGeo ? t('map.noMatch.hint') : t('map.empty.hint')}</p>
-          {libraryHasGeo
-            ? <Button onClick={() => useUi.getState().resetFilters()}>{t('map.noMatch.action')}</Button>
-            : (filteredCount > 0 && <Button onClick={showWithout}>{t('map.empty.action')}</Button>)}
+        <div className="mp-empty-wrap">
+          <div className="mp-empty glass">
+            <MapPinOff size={26} strokeWidth={1.5} />
+            <h3>{libraryHasGeo ? t('map.noMatch.title') : t('map.empty.title')}</h3>
+            <p>{libraryHasGeo ? t('map.noMatch.hint') : t('map.empty.hint')}</p>
+            {libraryHasGeo
+              ? <Button onClick={() => useUi.getState().resetFilters()}>{t('map.noMatch.action')}</Button>
+              : (filteredCount > 0 && <Button onClick={showWithout}>{t('map.empty.action')}</Button>)}
+          </div>
         </div>
       )}
 

@@ -80,7 +80,7 @@
 .fp-sec__chev.is-closed { transform: rotate(-90deg); }
 .fp-sec__body { padding-top: 8px; }
 .fp-chips { display: flex; gap: 8px; }
-.fp-kind { flex: 1; justify-content: center; height: 32px; }
+.chip.fp-kind { flex: 1; justify-content: center; height: 32px; gap: 6px; }
 .fp-kind__n, .fp-seg-n { color: var(--text-3); font-weight: 500; margin-left: 2px; }
 .fp-kind[aria-pressed='true'] .fp-kind__n { color: inherit; opacity: .75; }
 .fp-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-top: 1px solid var(--border); }

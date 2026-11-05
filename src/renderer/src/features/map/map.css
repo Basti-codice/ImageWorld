@@ -82,7 +82,8 @@
 .mp-chip__dash { width: 14px; height: 10px; border-radius: 3px; border: 1.5px dashed var(--accent); }
 .mp-chip__x { width: 20px; height: 20px; display: grid; place-items: center; border-radius: 50%; background: var(--surface-3); color: var(--text-2); font-size: 14px; line-height: 1; }
 
-.mp-empty { position: absolute; z-index: var(--z-map-ui); left: 50%; top: 50%; transform: translate(-50%, -50%); width: 320px; padding: 26px 24px 22px; border-radius: var(--r-lg); display: grid; justify-items: center; gap: 8px; text-align: center; color: var(--text-3); animation: iw-pop-in var(--dur-slow) var(--ease) both; }
+.mp-empty-wrap { position: absolute; inset: 0; z-index: var(--z-map-ui); display: grid; place-items: center; pointer-events: none; padding-bottom: 80px; }
+.mp-empty { pointer-events: auto; width: 320px; padding: 26px 24px 22px; border-radius: var(--r-lg); display: grid; justify-items: center; gap: 8px; text-align: center; color: var(--text-3); animation: iw-pop-in var(--dur-slow) var(--ease) both; }
 .mp-empty h3 { color: var(--text); font-size: 15px; margin-top: 4px; }
 .mp-empty p { margin: 0 0 8px; color: var(--text-2); }
 
@@ -141,7 +142,7 @@
 .mk--dot.mk--single { border-radius: 50%; background: var(--accent); border: 2px solid #fff; box-shadow: 0 1px 5px rgba(0,0,0,.4); }
 .mk__count { font-size: 11px; font-weight: 650; }
 
-.mk--old { opacity: .5; filter: saturate(.45); }
+.mk--old { opacity: .78; filter: saturate(.4) brightness(.85); }
 .mk--fresh::after { content: ''; position: absolute; inset: -5px; border-radius: 18px; border: 2px solid var(--accent); animation: mk-pulse 1.5s ease-out infinite; pointer-events: none; }
 .mk--dot.mk--fresh::after { border-radius: 50%; }
 

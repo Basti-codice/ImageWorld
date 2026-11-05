@@ -58,7 +58,6 @@ export const map: Bundle = {
     'map.webgl.hint': 'WebGL wird auf diesem Gerät nicht unterstützt oder ist deaktiviert. Aktualisiere den Grafiktreiber und starte die App neu.',
     'map.mini.noLocation': 'Kein Standort',
     'map.mini.aria': 'Kartenausschnitt der Aufnahmeorte',
-    'map.playback.following': 'Reise wird abgespielt',
   },
   en: {
     'map.photos.one': '{n} photo',
@@ -117,6 +116,5 @@ export const map: Bundle = {
     'map.webgl.hint': 'WebGL is not supported or is disabled on this device. Update your graphics driver and restart the app.',
     'map.mini.noLocation': 'No location',
     'map.mini.aria': 'Map of where the photos were taken',
-    'map.playback.following': 'Playing journey',
   },
 };

@@ -157,10 +157,10 @@ export class MapController {
       id: 'iw-heat', type: 'heatmap', source: 'iw-heat', layout: { visibility: this.heatmap ? 'visible' : 'none' },
       paint: {
         'heatmap-weight': 1,
-        'heatmap-intensity': ['interpolate', ['linear'], ['zoom'], 0, 0.1, 4, 0.14, 8, 0.4, 12, 1.1, 16, 2.4],
+        'heatmap-intensity': ['interpolate', ['linear'], ['zoom'], 0, 0.025, 5, 0.035, 8, 0.1, 12, 0.5, 16, 1.5],
         'heatmap-radius': ['interpolate', ['exponential', 1.6], ['zoom'], 0, 14, 3, 26, 6, 36, 10, 52, 14, 76, 17, 100],
         'heatmap-opacity': ['interpolate', ['linear'], ['zoom'], 0, 0.92, 9, 0.85, 14, 0.2, 17, 0],
-        'heatmap-color': ['interpolate', ['linear'], ['heatmap-density'], 0, hexA(cssVar('--heat-1'), 0), 0.1, hexA(cssVar('--heat-1'), 0.35), 0.3, hexA(cssVar('--heat-2'), 0.7), 0.52, hexA(cssVar('--heat-3'), 0.8), 0.76, hexA(cssVar('--heat-4'), 0.9), 1, cssVar('--heat-5')],
+        'heatmap-color': ['interpolate', ['linear'], ['heatmap-density'], 0, hexA(cssVar('--heat-1'), 0), 0.012, hexA(cssVar('--heat-1'), 0.45), 0.08, hexA(cssVar('--heat-2'), 0.72), 0.25, hexA(cssVar('--heat-3'), 0.82), 0.5, hexA(cssVar('--heat-4'), 0.9), 1, cssVar('--heat-5')],
       },
     });
     layer({ id: 'iw-area-applied-fill', type: 'fill', source: 'iw-area-applied', paint: { 'fill-color': accent, 'fill-opacity': 0.05 } });
@@ -168,7 +168,7 @@ export class MapController {
     layer({ id: 'iw-area-draft-fill', type: 'fill', source: 'iw-area-draft', paint: { 'fill-color': accent, 'fill-opacity': 0.12 } });
     layer({ id: 'iw-area-draft-line', type: 'line', source: 'iw-area-draft', layout: { 'line-join': 'round' }, paint: { 'line-color': accent, 'line-width': 2 } });
     layer({ id: 'iw-route-casing', type: 'line', source: 'iw-route', layout: { 'line-cap': 'round', 'line-join': 'round' }, paint: { 'line-color': halo, 'line-width': 5, 'line-opacity': 0.55 } });
-    layer({ id: 'iw-route-line', type: 'line', source: 'iw-route', layout: { 'line-cap': 'round', 'line-join': 'round' }, paint: { 'line-color': accent, 'line-width': 2.5 } });
+    layer({ id: 'iw-route-line', type: 'line', source: 'iw-route', layout: { 'line-cap': 'round', 'line-join': 'round' }, paint: { 'line-color': accent, 'line-width': 2.2, 'line-opacity': 0.9 } });
     layer({
       id: 'iw-dots', type: 'circle', source: 'iw-dots',
       paint: {

@@ -90,7 +90,10 @@
 .pv__count { color: var(--text-3); font-size: var(--fs-sm, 12px); white-space: nowrap; }
 .pv__body { flex: 1; min-height: 0; }
 .pv__empty-wrap { height: 100%; display: grid; place-items: center; }
-.pv__chip { gap: 7px; }
+.chip.pv__chip, .chip.fp-kind { position: static; display: inline-flex; align-items: center; gap: 7px; height: 28px; padding: 0 11px; border-radius: var(--r-pill); font-size: var(--fs-sm, 12px); font-weight: var(--fw-medium, 550); letter-spacing: normal;
+  background: var(--surface-2); border: 1px solid var(--border); color: var(--text-2); box-shadow: none; backdrop-filter: none; }
+.chip.pv__chip:hover, .chip.fp-kind:hover { background: var(--surface-3); color: var(--text); }
+.chip.pv__chip[aria-pressed='true'], .chip.fp-kind[aria-pressed='true'] { background: var(--accent-soft); border-color: transparent; color: var(--accent-text, var(--accent)); }
 .pv__chip svg { flex: none; }
 .pv__badge { display: inline-grid; place-items: center; min-width: 16px; height: 16px; padding: 0 4px; border-radius: 8px; background: var(--accent); color: var(--text-on-accent); font-size: 10.5px; font-weight: 650; }
 

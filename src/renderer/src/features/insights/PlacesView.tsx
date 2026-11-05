@@ -61,7 +61,7 @@ const PlaceCard = memo(function PlaceCard({ title, code, cover, count, meta, tar
       <button className="pcard__main" onClick={onOpen} aria-label={`${title} – ${openLabel}`}>
         <span className="pcard__cover" style={{ background: cover.color ?? 'var(--surface-3)' }}>
           <img src={thumbUrl(cover, 512)} alt="" loading="lazy" decoding="async" draggable={false} />
-          {code && <span className="chip">{code}</span>}
+          {code && <span className="pcc">{code}</span>}
         </span>
         <span className="pcard__txt">
           <b className="truncate">{title}</b>
@@ -159,7 +159,7 @@ export default function PlacesView() {
             <header className="phead">
               <div className="phead__cover"><img src={thumbUrl(country.cover, 512)} alt="" draggable={false} /></div>
               <div className="phead__main">
-                <div className="phead__title"><h1>{name}</h1><span className="chip chip--flat">{country.cc}</span></div>
+                <div className="phead__title"><h1>{name}</h1><span className="pcc pcc--flat">{country.cc}</span></div>
                 <p className="phead__sub">{[continentKey && t(`places.continent.${continentKey}`), years(country.firstTs, country.lastTs)].filter(Boolean).join(' · ')}</p>
                 <dl className="phead__stats">
                   <div><dt>{t('places.stat.photos')}</dt><dd className="tabular">{fmtNumber(country.count)}</dd></div>
