@@ -321,7 +321,7 @@ export class MapController {
       const dx = (b.getEast() - b.getWest()) * 0.12, dy = (b.getNorth() - b.getSouth()) * 0.12;
       bounds = [b.getWest() - dx, b.getSouth() - dy, b.getEast() + dx, b.getNorth() + dy];
     }
-    let clusters = clusterize(ix, { zoom: Z, cellPx: 72, minDistPx: this.thumbMarkers ? 60 : 36, bounds, start });
+    let clusters = clusterize(ix, { zoom: Z, cellPx: 72, minDistPx: this.thumbMarkers ? 66 : 36, bounds, start });
     if (this.projection === 'globe' && z < 6) {
       const c = m.getCenter();
       clusters = clusters.filter((k) => angularDistance(c.lng, c.lat, k.lon, k.lat) < 78);
@@ -397,7 +397,7 @@ export class MapController {
 
   private overviewZoom(w: number, h: number): number {
     return this.projection === 'globe'
-      ? Math.log2((0.84 * Math.min(h, w * 0.9) * Math.PI) / 512)
+      ? Math.log2((0.76 * Math.min(h, w * 0.9) * Math.PI) / 512)
       : Math.log2(Math.max(w, h * 2) / 512);
   }
 
