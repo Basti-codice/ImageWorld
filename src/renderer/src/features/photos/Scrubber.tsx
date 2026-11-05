@@ -32,6 +32,7 @@ export default function Scrubber({ scrollerRef, layout, headerH }: { scrollerRef
   const [trackH, setTrackH] = useState(0);
   const [scrollable, setScrollable] = useState(false);
   const dragging = useRef(false);
+  const hovering = useRef(false);
   const contentH = headerH + layout.total + GRID_BOTTOM_PAD;
 
   useEffect(() => {
@@ -71,7 +72,7 @@ export default function Scrubber({ scrollerRef, layout, headerH }: { scrollerRef
       if (showBubble && b && !dragging.current) {
         const m = markAt(layout.marks, Math.max(0, sc.scrollTop - headerH + 60));
         b.textContent = labelOf(m); b.style.transform = `translateY(${y + size / 2}px) translateY(-50%)`;
-        b.dataset.show = '1'; clearTimeout(hideTimer); hideTimer = window.setTimeout(() => { b.dataset.show = ''; }, 900);
+        b.dataset.show = '1'; clearTimeout(hideTimer); hideTimer = window.setTimeout(() => { if (!hovering.current) b.dataset.show = ''; }, 900);
       }
     };
     const onScroll = () => sync(true);
@@ -89,13 +90,14 @@ export default function Scrubber({ scrollerRef, layout, headerH }: { scrollerRef
   };
   const showHover = (clientY: number) => {
     const sc = scrollerRef.current; if (!sc) return;
+    hovering.current = true;
     const { y, top } = posToScroll(clientY);
     const m = markAt(layout.marks, dragging.current ? Math.max(0, top - headerH + 60) : Math.max(0, (y / (trackRef.current!.clientHeight || 1)) * contentH - headerH));
     const b = bubbleRef.current, hv = hoverRef.current; if (!b || !hv) return;
     b.textContent = labelOf(m); b.style.transform = `translateY(${y}px) translateY(-50%)`; b.dataset.show = '1';
     hv.style.transform = `translateY(${y}px)`; hv.dataset.show = '1';
   };
-  const hideHover = () => { if (dragging.current) return; if (bubbleRef.current) bubbleRef.current.dataset.show = ''; if (hoverRef.current) hoverRef.current.dataset.show = ''; };
+  const hideHover = () => { hovering.current = false; if (dragging.current) return; if (bubbleRef.current) bubbleRef.current.dataset.show = ''; if (hoverRef.current) hoverRef.current.dataset.show = ''; };
 
   const onDown = (e: React.PointerEvent) => {
     e.preventDefault(); e.stopPropagation();

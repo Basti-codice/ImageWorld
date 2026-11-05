@@ -21,8 +21,11 @@
 .ph__place { font-size: var(--fs-base, 13px); color: var(--text-3); font-weight: 500; }
 .ph__place::before { content: '·'; margin-right: 10px; color: var(--text-3); }
 .ph__count { font-size: var(--fs-sm, 12px); color: var(--text-3); white-space: nowrap; padding-bottom: 1px; }
-.ph__check { position: static; opacity: 0; flex: none; margin-bottom: -1px; }
-.ph:hover .ph__check, .ph__check[data-on] { opacity: 1; }
+.ph__check { width: 20px; height: 20px; border-radius: 50%; display: grid; place-items: center; flex: none; margin-bottom: -1px; color: transparent; cursor: pointer;
+  border: 1.5px solid var(--text-3); opacity: 0; transition: opacity var(--dur-fast) var(--ease), background var(--dur-fast), border-color var(--dur-fast); }
+.ph:hover .ph__check, .pg--selecting .ph__check { opacity: 1; }
+.ph__check:hover { border-color: var(--text-2); }
+.ph__check[data-on] { opacity: 1; background: var(--accent); border-color: var(--accent); color: var(--text-on-accent); }
 
 /* ---------------------------------------------------------------- cells */
 .pc { position: absolute; top: 0; outline: none; border-radius: 4px; cursor: default; contain: layout style paint; }

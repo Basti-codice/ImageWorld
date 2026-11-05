@@ -47,7 +47,7 @@ for (const f of files) {
 console.log('externals required by main/preload bundle:', [...bare].sort().join(', ') || '(none)');
 const seen = new Set();
 function check(name, from) {
-  if (seen.has(name)) return;
+  if (seen.has(name) || name.startsWith('@types/')) return; // type-only packages are intentionally not shipped
   seen.add(name);
   const pj = join(root, 'node_modules', name, 'package.json');
   if (!existsSync(pj)) return; // optional / platform-specific dep not installed here

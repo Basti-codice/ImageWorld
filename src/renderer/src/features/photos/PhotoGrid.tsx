@@ -89,7 +89,7 @@ const Heading = memo(function Heading({ row, sticky, allSelected, labels, lang, 
         {row.places.length > 0 && <span className="ph__place truncate">{row.places.join(', ')}{row.morePlaces > 0 ? ` +${row.morePlaces}` : ''}</span>}
       </div>
       <span className="ph__count tabular">{tn('common.photos', row.count)}</span>
-      <span className="ph__check pc__check" data-act="group" data-from={row.from} data-to={row.to} data-on={allSelected || undefined}
+      <span className="ph__check" data-act="group" data-from={row.from} data-to={row.to} data-on={allSelected || undefined}
         title={allSelected ? labels.deselect : labels.select}><Check size={13} strokeWidth={3} /></span>
     </div>
   );

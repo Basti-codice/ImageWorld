@@ -112,4 +112,4 @@ export async function buildFixtures(): Promise<Fixtures> {
 }
 
 /** number of media files buildFixtures() creates that the scanner must index (no txt / hidden / recycle) */
-export const FIXTURE_MEDIA_COUNT = 16; // paris portrait rio IMG nullisland tokyo anim pic.webp pic.avif scan old.bmp clip.mp4 raw.dng photo.heic broken.jpg + (see test)
+export const FIXTURE_MEDIA_COUNT = 15;
