@@ -49,6 +49,7 @@ asarUnpack:
   - node_modules/exiftool-vendored.pl/**
   - node_modules/ffmpeg-static/**
   - node_modules/libheif-js/**
+  - out/main/**
 
 extraResources:
   - from: resources/icon.png

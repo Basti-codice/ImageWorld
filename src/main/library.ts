@@ -220,6 +220,7 @@ export class Library {
         if (patch.location && isFinite(patch.location.lat) && isFinite(patch.location.lon)) {
           if (!this.baseGeo.has(id)) this.baseGeo.set(id, { lat: p.lat, lon: p.lon, alt: p.alt, place: p.place });
           p.lat = patch.location.lat; p.lon = patch.location.lon; p.alt = null; p.geoSource = 'manual';
+          delete p.place; // re-resolved below
           cur.location = { lat: patch.location.lat, lon: patch.location.lon };
           void this.resolveManualPlace(id);
         } else {
