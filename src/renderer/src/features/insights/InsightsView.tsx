@@ -79,7 +79,7 @@ export default function InsightsView() {
   const gearList = gear === 'cameras' ? s.cameras : s.lenses;
   const gearRows: Row[] = gearList.map((c) => ({ key: c.key, label: c.label, value: c.count, tipTitle: c.label, tipBody: tn('common.photos', c.count) }));
 
-  const focalCols: Col[] = s.focal.map((n, i) => ({ key: i, label: FOCAL_BINS[i].label, values: [n], tipTitle: `${FOCAL_BINS[i].label} mm`, tipBody: tn('common.photos', n), peak: n > 0 && n === Math.max(...s.focal) }));
+  const focalCols: Col[] = s.focal.map((n, i) => ({ key: i, label: FOCAL_BINS[i].label, values: [n], tipTitle: `${FOCAL_BINS[i].range ?? FOCAL_BINS[i].label} mm`, tipBody: tn('common.photos', n), peak: n > 0 && n === Math.max(...s.focal) }));
   const apCols: Col[] = s.aperture.map((n, i) => ({ key: i, label: APERTURE_BINS[i].label, values: [n], tipTitle: APERTURE_BINS[i].label, tipBody: tn('common.photos', n), peak: n > 0 && n === Math.max(...s.aperture) }));
   const hasFocal = s.focal.some(Boolean), hasAperture = s.aperture.some(Boolean);
 
@@ -162,12 +162,12 @@ export default function InsightsView() {
 
             {hasFocal && (
               <Card className="span-4" title={t('insights.focal.title')} hint={t('insights.focal.hint')}>
-                <ColumnChart cols={focalCols} colors={[SERIES[0]]} height={140} maxWidth={26} ariaLabel={t('insights.focal.title')} />
+                <ColumnChart cols={focalCols} colors={[SERIES[0]]} height={215} maxWidth={26} ariaLabel={t('insights.focal.title')} />
               </Card>
             )}
             {hasAperture && (
               <Card className="span-4" title={t('insights.aperture.title')} hint={t('insights.aperture.hint')}>
-                <ColumnChart cols={apCols} colors={[SERIES[0]]} height={140} maxWidth={26} ariaLabel={t('insights.aperture.title')} />
+                <ColumnChart cols={apCols} colors={[SERIES[0]]} height={215} maxWidth={26} ariaLabel={t('insights.aperture.title')} />
               </Card>
             )}
             <Card className="span-4" title={t('insights.rating.title')} hint={t('insights.rating.hint', { n: fmtNumber(s.rated) })}>

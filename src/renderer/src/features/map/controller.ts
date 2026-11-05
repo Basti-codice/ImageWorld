@@ -11,7 +11,9 @@ export interface Viewport {
   bounds: [number, number, number, number];
   zoom: number;
   bearing: number;
-  /** indices (into the photo array given to setPhotos) of photos inside the viewport, newest first */
+  /** the photo array handed to setPhotos */
+  photos: Photo[];
+  /** indices into `photos` of photos inside the viewport, newest first */
   inView: number[];
 }
 
@@ -63,7 +65,7 @@ export class MapController {
   private draw: DrawTool | null = null;
   private ready = false;
   private destroyed = false;
-  private fitted = false;
+  private fitted = !!lastCam;
   private styleId: MapStyleId; private dark: boolean; private projection: 'globe' | 'mercator';
   private heatmap = false; private thumbMarkers = true;
   private pb: PlaybackState = { cursor: null, route: true, follow: true, speed: 30 };
@@ -355,7 +357,7 @@ export class MapController {
       const c = m.getCenter();
       inView = inView.filter((i) => angularDistance(c.lng, c.lat, this.ix.lon[i], this.ix.lat[i]) < 80);
     }
-    this.hooks.viewport({ bounds: [b.getWest(), b.getSouth(), b.getEast(), b.getNorth()], zoom: z, bearing: m.getBearing(), inView });
+    this.hooks.viewport({ bounds: [b.getWest(), b.getSouth(), b.getEast(), b.getNorth()], zoom: z, bearing: m.getBearing(), photos: this.photos, inView });
   }
 
   // ------------------------------------------------------------------ interaction
@@ -395,7 +397,7 @@ export class MapController {
   // ------------------------------------------------------------------ camera
 
   private overviewZoom(w: number, h: number): number {
-    return this.projection === 'globe' || !this.map
+    return this.projection === 'globe'
       ? Math.log2((0.8 * Math.min(h, w * 0.9) * Math.PI) / 512)
       : Math.log2(Math.max(w, h * 2) / 512);
   }
@@ -409,7 +411,7 @@ export class MapController {
     this.fitted = ix.n > 0;
     const run = (center: [number, number], zoom: number) => {
       const intro = animate && !introPlayed && !prefersReducedMotion();
-      introPlayed = true;
+      this.timers.push(window.setTimeout(() => { introPlayed = true; }, 60));
       if (intro) {
         m.jumpTo({ center: [center[0] - 38, center[1] - 6], zoom: Math.max(0.5, zoom - 1.3), bearing: 0 });
         m.easeTo({ center, zoom, duration: 2600, essential: true, easing: (t) => 1 - Math.pow(1 - t, 3.2), padding: { top: 24, bottom: 96, left: 0, right: 0 } });

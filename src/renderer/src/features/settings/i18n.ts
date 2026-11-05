@@ -31,7 +31,7 @@ export const settings: Bundle = {
     'settings.sources.scanning': 'Wird synchronisiert', 'settings.sources.files': '{n} Dateien',
 
     'settings.storage.cache': 'Vorschaubilder', 'settings.storage.cacheLimit': 'Maximale Cache-Größe', 'settings.storage.cacheLimit.desc': 'Vorschaubilder werden einmal erzeugt und lokal zwischengespeichert. Wird das Limit erreicht, werden die ältesten zuerst entfernt.',
-    'settings.storage.clear': 'Cache leeren', 'settings.storage.clear.desc': 'Löscht alle zwischengespeicherten Vorschaubilder. Sie werden bei Bedarf neu erzeugt – deine Originale bleiben unberührt.',
+    'settings.storage.clear': 'Cache leeren', 'settings.storage.clear.desc': 'Löscht alle zwischengespeicherten Vorschaubilder. Sie werden bei Bedarf neu erzeugt – die Originale bleiben unberührt.',
     'settings.storage.cleared': 'Vorschau-Cache geleert', 'settings.storage.clearFailed': 'Cache konnte nicht geleert werden',
     'settings.storage.data': 'Programmdaten', 'settings.storage.location': 'Speicherort',
     'settings.storage.data.desc': 'Einstellungen, Alben, Favoriten, Bewertungen, Markierungen und der Metadaten-Index liegen im Benutzerprofil. Originalfotos werden nie kopiert oder verändert.',
@@ -42,12 +42,12 @@ export const settings: Bundle = {
     'settings.shortcuts.views': 'Weltkarte, Mediathek, Alben, Orte, Statistik', 'settings.shortcuts.prev': 'Vorheriges / nächstes Foto', 'settings.shortcuts.closeViewer': 'Foto-Ansicht schließen',
 
     'settings.about.tagline': 'Deine Fotos auf der Weltkarte.', 'settings.about.version': 'Version {v}',
-    'settings.about.privacy': 'Datenschutz', 'settings.about.privacy.lead': 'Deine Fotos verlassen diesen PC nie.',
+    'settings.about.privacy': 'Datenschutz', 'settings.about.privacy.lead': 'Fotos verlassen diesen PC nie.',
     'settings.about.p1': 'Fotos, Videos und Metadaten werden ausschließlich lokal gelesen und gespeichert. Es gibt keine Uploads, keine Konten und keine Nutzungsstatistik.',
     'settings.about.p2': 'Die Grundkarte ist in der App enthalten. Nur die folgenden Dienste werden – optional – über das Internet abgefragt:',
     'settings.about.svc': 'Online-Dienste', 'settings.about.svc.what': 'Wofür', 'settings.about.svc.sent': 'Was gesendet wird',
-    'settings.about.tiles': 'Kartenkacheln', 'settings.about.tiles.what': 'Satelliten- und Detailkarten', 'settings.about.tiles.sent': 'Kachel-Koordinaten (Zoom, x, y) des sichtbaren Ausschnitts und deine IP-Adresse – keine Fotos, keine Standorte aus deiner Bibliothek.',
-    'settings.about.nominatim': 'Nominatim (OpenStreetMap)', 'settings.about.nominatim.what': 'Ortssuche', 'settings.about.nominatim.sent': 'Der eingegebene Suchbegriff und deine IP-Adresse. Abschaltbar unter Karte › Online-Suche.',
+    'settings.about.tiles': 'Kartenkacheln', 'settings.about.tiles.what': 'Satelliten- und Detailkarten', 'settings.about.tiles.sent': 'Kachel-Koordinaten (Zoom, x, y) des sichtbaren Ausschnitts und die IP-Adresse – keine Fotos, keine Standorte aus der Bibliothek.',
+    'settings.about.nominatim': 'Nominatim (OpenStreetMap)', 'settings.about.nominatim.what': 'Ortssuche', 'settings.about.nominatim.sent': 'Der eingegebene Suchbegriff und die IP-Adresse. Abschaltbar unter Karte › Online-Suche.',
     'settings.about.offline': 'Ohne Internetverbindung funktionieren Bibliothek, Karte (Dunkel/Hell), Suche in der Bibliothek und alle Ansichten weiter.',
     'settings.about.license': 'Kartendaten © OpenStreetMap-Mitwirkende · Ländergrenzen: Natural Earth',
   },
@@ -92,7 +92,7 @@ export const settings: Bundle = {
     'settings.shortcuts.views': 'World map, Library, Albums, Places, Insights', 'settings.shortcuts.prev': 'Previous / next photo', 'settings.shortcuts.closeViewer': 'Close photo viewer',
 
     'settings.about.tagline': 'Your photos on the world map.', 'settings.about.version': 'Version {v}',
-    'settings.about.privacy': 'Privacy', 'settings.about.privacy.lead': 'Your photos never leave this PC.',
+    'settings.about.privacy': 'Privacy', 'settings.about.privacy.lead': 'Photos never leave this PC.',
     'settings.about.p1': 'Photos, videos and metadata are read and stored locally only. There are no uploads, no accounts and no usage tracking.',
     'settings.about.p2': 'The base map ships with the app. Only the following services are – optionally – contacted over the internet:',
     'settings.about.svc': 'Online services', 'settings.about.svc.what': 'Purpose', 'settings.about.svc.sent': 'What is sent',

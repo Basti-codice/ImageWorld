@@ -76,7 +76,6 @@ const WorldMap = memo(function WorldMap({ visited, onPickCountry, focus, onPickC
       const fc: FeatureCollection = { type: 'FeatureCollection', features: lands.map((l) => l.geo) };
       proj.fitWidth(w, fc);
       const b = geoPath(proj).bounds(fc);
-      h = Math.ceil(b[1][1] + 2);
       proj.translate([proj.translate()[0], proj.translate()[1] - b[0][1] + 1]);
       h = Math.ceil(b[1][1] - b[0][1] + 2);
     }

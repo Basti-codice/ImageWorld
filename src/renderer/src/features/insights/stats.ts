@@ -25,9 +25,9 @@ export interface Stats {
   furthest: { city: string; cc: string; km: number; lat: number; lon: number } | null;
 }
 
-export const FOCAL_BINS: Array<{ max: number; label: string }> = [
-  { max: 17, label: '≤16' }, { max: 25, label: '17–24' }, { max: 36, label: '25–35' }, { max: 51, label: '36–50' },
-  { max: 86, label: '51–85' }, { max: 136, label: '86–135' }, { max: 301, label: '136–300' }, { max: Infinity, label: '>300' },
+export const FOCAL_BINS: Array<{ max: number; label: string; range?: string }> = [
+  { max: 17, label: '≤16' }, { max: 25, label: '≤24', range: '17–24' }, { max: 36, label: '≤35', range: '25–35' }, { max: 51, label: '≤50', range: '36–50' },
+  { max: 86, label: '≤85', range: '51–85' }, { max: 136, label: '≤135', range: '86–135' }, { max: 301, label: '≤300', range: '136–300' }, { max: Infinity, label: '>300' },
 ];
 export const APERTURE_BINS: Array<{ max: number; label: string }> = [
   { max: 1.5, label: 'f/1.4' }, { max: 2.1, label: 'f/2' }, { max: 3.0, label: 'f/2.8' }, { max: 4.5, label: 'f/4' },

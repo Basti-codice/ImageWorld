@@ -3,7 +3,7 @@ import { spawn } from 'node:child_process';
 import { existsSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import ffmpegStatic from 'ffmpeg-static';
-import sharp from 'sharp';
+import sharp, { type Sharp } from 'sharp';
 import type { ThumbSize } from '@shared/types';
 import { decodeBmp } from './bmp';
 import { getExifTool } from './metadata';
@@ -33,7 +33,7 @@ const orientationOps: Record<number, { rotate?: number; flip?: boolean; flop?: b
   1: {}, 2: { flop: true }, 3: { rotate: 180 }, 4: { flip: true }, 5: { rotate: 90 }, 6: { rotate: 90 }, 7: { rotate: 270 }, 8: { rotate: 270 },
 };
 
-async function encode(input: sharp.Sharp, size: ThumbSize): Promise<Buffer> {
+async function encode(input: Sharp, size: ThumbSize): Promise<Buffer> {
   const cover = size !== 1600;
   return input
     .resize(size, size, cover ? { fit: 'cover' } : { fit: 'inside', withoutEnlargement: true })

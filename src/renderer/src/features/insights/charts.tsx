@@ -1,4 +1,4 @@
-import { createContext, memo, useCallback, useContext, useEffect, useMemo, useRef, type ReactNode, type CSSProperties } from 'react';
+import { createContext, memo, useCallback, useContext, useMemo, useRef, type ReactNode, type CSSProperties } from 'react';
 import clsx from 'clsx';
 import { scaleLinear } from 'd3-scale';
 import { fmtNumber } from '@/lib/format';
@@ -146,7 +146,7 @@ export const RowBars = memo(function RowBars({ rows, onPick, ariaLabel, lead }: 
                 {r.sub && <span className="rb__sub truncate">{r.sub}</span>}
                 <span className="rb__val tabular">{fmtNumber(r.value)}</span>
               </span>
-              <span className="rb__track"><span className="rb__fill" style={{ width: `${Math.max(1.5, (r.value / max) * 100)}%` }} /></span>
+              <span className="rb__track"><span className="rb__fill" style={{ width: `${r.value ? Math.max(1.5, (r.value / max) * 100) : 0}%` }} /></span>
             </Tag>
           </li>
         );
@@ -193,7 +193,7 @@ export const Heatmap = memo(function Heatmap({ year, daily, onPick, tipFor, mont
 
   const w = LEFT + model.cols * STEP, h = TOP + 7 * STEP;
   return (
-    <svg className="heat" viewBox={`0 0 ${w} ${h}`} role="img" aria-label={ariaLabel} style={{ maxWidth: w * 1.45 }}>
+    <svg className="heat" viewBox={`0 0 ${w} ${h}`} role="img" aria-label={ariaLabel} style={{ maxWidth: w * 1.25 }}>
       {model.months.map(({ m, col }) => <text key={m} x={LEFT + Math.floor(col) * STEP} y={9} className="heat__txt">{monthLabels[m]}</text>)}
       {[0, 2, 4].map((r) => <text key={r} x={0} y={TOP + r * STEP + CELL - 1.5} className="heat__txt">{weekdayLabels[r]}</text>)}
       {model.cells.map((c) => (
@@ -207,18 +207,5 @@ export const Heatmap = memo(function Heatmap({ year, daily, onPick, tipFor, mont
     </svg>
   );
 });
-
-/** Tiny hook for rAF-free resize observation. */
-export function useWidth<T extends HTMLElement>() {
-  const ref = useRef<T>(null);
-  const widthRef = useRef(0);
-  const set = useRef<(w: number) => void>(() => {});
-  useEffect(() => {
-    const el = ref.current; if (!el) return;
-    const ro = new ResizeObserver(([e]) => { widthRef.current = e.contentRect.width; set.current(e.contentRect.width); });
-    ro.observe(el); return () => ro.disconnect();
-  }, []);
-  return { ref, widthRef, onWidth: (fn: (w: number) => void) => { set.current = fn; } };
-}
 
 export const fmtCompactNumber = (n: number) => new Intl.NumberFormat(currentLocale(), { notation: 'compact', maximumFractionDigits: 1 }).format(n);
